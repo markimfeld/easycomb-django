@@ -1,0 +1,98 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% block page-title %}
+Categorias
+<a class="btn btn-success" href="{% url 'inventory:new_category' %}">
+    <i class="fas fa-plus-circle">
+    </i>
+    Agregar
+</a>
+{% endblock page-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Categorias</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
+                    <i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-simple projects">
+                <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th style="width: 50%" class="text-center">
+                            Accion
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>
+                            #
+                        </td>
+                        <td>
+                            <a>
+                                {{ category.name }}
+                            </a>
+                        </td>
+                        <td class="project-actions text-center">
+                            <a class="btn btn-primary btn-sm" href="#">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-default{{ category.id }}">
+                                <i class="fas fa-trash">
+                                </i>
+                                
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- Modal to Delete category -->
+                    <div class="modal fade" id="modal-default{{ category.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Borrar Categoria</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="h6">Estas seguro de borrar la categoria con nombre <strong>{{ category.name }}</strong>?</p>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <a href="{% url 'inventory:delete_category' category.id %}" class="btn btn-danger">Borrar</a>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+{% endblock content %}

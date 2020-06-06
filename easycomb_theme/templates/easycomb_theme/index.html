@@ -1,7 +1,37 @@
 {% extends 'easycomb_theme/layout.html' %}
 
+
+{% block page-title %}
+Escritorio
+{% endblock page-title%}
+
 {% block content %}
+<!-- Main content -->
+<section class="content">
+    <!-- Small Box (Stat card) -->
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-3 col-6">
+            <!-- small card -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>{{ product.stock }}</h3>
 
+                    <p>{{ product.name }}</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Más info <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- ./col -->
+    </div>
+    <!-- /.row -->
+</section>
 
-
+<!-- /.content -->
 {% endblock %}
