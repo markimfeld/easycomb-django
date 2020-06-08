@@ -1,9 +1,9 @@
 {% extends 'easycomb_theme/layout.html' %}
 
 {% block section-title %}
-Productos
-<a class="btn btn-success btn-sm" href="{% url 'inventory:new_product' %}"><i class="fas fa-plus-circle">
-        Agregar</i></a>
+Compras
+<a class="btn btn-success btn-sm" href="{% url 'suppliers:new_purchase' %}"><i class="fas fa-plus-circle">
+    Agregar</i></a>
 {% endblock section-title %}
 
 {% block content %}
@@ -13,7 +13,7 @@ Productos
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Productos</h3>
+            <h3 class="card-title">Compras</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
@@ -31,19 +31,10 @@ Productos
                             #
                         </th>
                         <th>
-                            Product Name
+                            Proveedor
                         </th>
                         <th>
-                            Precio Mayorista
-                        </th>
-                        <th>
-                            Precio Minorista
-                        </th>
-                        <th>
-                            Categoria
-                        </th>
-                        <th style="width: 8%" class="text-center">
-                            Stock
+                            Fecha
                         </th>
                         <th style="width: 20%" class="text-center">
                             Accion
@@ -51,34 +42,25 @@ Productos
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in products %}
+                    {% for purchase in purchases %}
                     <tr>
                         <td>
                             #
                         </td>
                         <td>
                             <a>
-                                {{ product.name }}
+                                {{ purchase.supplier.first_name  }}
                             </a>
                         </td>
                         <td>
-                            ${{ product.retail_price }}
-                        </td>
-                        <td>
-                            ${{ product.wholesale_price }}
-                        </td>
-                        <td>
-                            {{ product.category }}
-                        </td>
-                        <td class="project-state">
-                            {% if product.stock > 0 %}
-                            <span class="badge badge-success">{{ product.stock }}</span>
-                            {% else %}
-                            <span class="badge badge-danger">{{ product.stock }}</span>
-                            {% endif %}
+                            {{ purchase.date }}
                         </td>
                         <td class="project-actions text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <a class="btn btn-primary btn-sm" href="{% url 'suppliers:purchase_detail' purchase.id %}">
+                                <i class="fas fa-eye">
+                                </i>
+                            </a>
+                            <a class="btn btn-info btn-sm" href="#">
                                 <i class="fas fa-pencil-alt">
                                 </i>
 
@@ -90,22 +72,22 @@ Productos
                             </a>
                         </td>
                     </tr>
-                    <!-- Modal to Delete product -->
-                    <div class="modal fade" id="modal-default{{ product.id }}">
+                    <!-- Modal to Delete purchase -->
+                    <div class="modal fade" id="modal-default{{ purchase.id }}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">Borrar Producto</h3>
+                                    <h3 class="modal-title">Borrar purchaseo</h3>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el producto con nombre <strong>{{ product.name }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el purchaseo con nombre <strong>{{ purchase.name }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="{% url 'inventory:delete_product' product.id %}" class="btn btn-danger">Borrar</a>
+                                    <a href="#" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->

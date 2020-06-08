@@ -19,6 +19,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{% static 'easycomb_theme/dist/css/adminlte.min.css' %}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    {% block header-resource %}
+    {% endblock header-resource %}
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -269,15 +271,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'suppliers:suppliers' %}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Encargos</p>
+                                        <p>Ver Lista</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'suppliers:purchases' %}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Productos</p>
+                                        <p>Compras</p>
                                     </a>
                                 </li>
                             </ul>
@@ -392,6 +394,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{% static 'easycomb_theme/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <!-- AdminLTE App -->
     <script src="{% static 'easycomb_theme/dist/js/adminlte.min.js' %}"></script>
+
+    {% block page-script %}
+    {% endblock page-script %}
 </body>
 
 </html>

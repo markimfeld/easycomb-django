@@ -10,6 +10,7 @@ class NewProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+        exclude = ('stock',)
         widgets = {
             'name': forms.TextInput(
                 attrs = {
@@ -25,11 +26,6 @@ class NewProductForm(forms.ModelForm):
             'category': forms.Select(
                 attrs = {
                     'class': 'form-control custom-select'
-                }
-            ),
-            'stock': forms.NumberInput(
-                attrs = {
-                    'class': 'form-control'
                 }
             ),
             'wholesale_price': forms.NumberInput(
