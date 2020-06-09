@@ -1,7 +1,7 @@
 {% extends 'easycomb_theme/layout.html' %}
 
 {% block section-title %}
-Proveedores
+Combos
 <a class="btn btn-success btn-sm" href="#"><i class="fas fa-plus-circle">
         Agregar</i></a>
 {% endblock section-title %}
@@ -13,7 +13,7 @@ Proveedores
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Proveedores</h3>
+            <h3 class="card-title">Combos</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
@@ -34,66 +34,68 @@ Proveedores
                             Nombre
                         </th>
                         <th>
-                            Telefono
+                            Precio
                         </th>
-                        <th>
-                            Direccion
+                        <th style="width: 8%" class="text-center">
+                            Estado
                         </th>
-                        <th>
-                            Ciudad
+                        <th style="width: 20%" class="text-center">
+                            Accion
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for supplier in suppliers %}
+                    {% for combo in combos %}
                     <tr>
                         <td>
                             #
                         </td>
                         <td>
                             <a>
-                                {{ supplier.first_name }}
+                                {{ combo.name }}
                             </a>
                         </td>
                         <td>
-                            {{ supplier.phone }}
+                            ${{ combo.price }}
                         </td>
-                        <td>
-                            {{ supplier.address }}
-                        </td>
-                        <td>
-                            {{ supplier.city }}
+                        <td class="project-state">
+                            <span class="badge badge-success">Disponible</span>
+                            <!-- {% if combo.stock > 0 %}
+                            <span class="badge badge-success">{{ combo.stock }}</span>
+                            {% else %}
+                            <span class="badge badge-danger">{{ combo.stock }}</span>
+                            {% endif %} -->
                         </td>
                         <td class="project-actions text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <a class="btn btn-primary btn-sm" href="{% url 'inventory:combo_details' combo.id %}">
                                 <i class="fas fa-eye">
                                 </i>
+
                             </a>
                             <a class="btn btn-info btn-sm" href="#">
                                 <i class="fas fa-pencil-alt">
                                 </i>
 
                             </a>
-                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
-                                data-target="#modal-default{{ supplier.id }}">
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-default{{ combo.id }}">
                                 <i class="fas fa-trash">
                                 </i>
+
                             </a>
                         </td>
                     </tr>
-                    <!-- Modal to Delete supplier -->
-                    <div class="modal fade" id="modal-default{{ supplier.id }}">
+                    <!-- Modal to Delete combo -->
+                    <div class="modal fade" id="modal-default{{ combo.id }}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">Borrar Proveedor</h3>
+                                    <h3 class="modal-title">Borrar Combo</h3>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el suppliero con nombre
-                                        <strong>{{ supplier.first_name }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el combo con nombre <strong>{{ combo.name }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

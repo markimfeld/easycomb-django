@@ -65,7 +65,7 @@ Compras
                                 </i>
 
                             </a>
-                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-default{{ product.id }}">
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-default{{ purchase.id }}">
                                 <i class="fas fa-trash">
                                 </i>
 
@@ -77,17 +77,17 @@ Compras
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">Borrar purchaseo</h3>
+                                    <h3 class="modal-title">Borrar Compra</h3>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el purchaseo con nombre <strong>{{ purchase.name }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el purchaseo con fecha <strong>{{ purchase.date }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="#" class="btn btn-danger">Borrar</a>
+                                    <a href="{% url 'suppliers:delete_purchase' purchase.id %}" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->

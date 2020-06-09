@@ -8,14 +8,24 @@ from .forms import (
 )
 from .models import (
     Product, 
-    Category
+    Category,
+    Combo
 )
+
+def get_all_combos(request):
+    return render(request, 'inventory/combos.html', {
+        'combos': Combo.objects.all()
+    })
+
+def get_combo_detail(request, pk):
+    return render(request, 'inventory/combo-detail.html', {
+        'combo': Combo.objects.get(pk=pk)
+    })
 
 def get_all_products(request):
     return render(request, 'inventory/products.html', {
         'products': Product.objects.all()
     })
-
 
 def add_new_product(request):
 

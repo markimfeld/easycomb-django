@@ -47,7 +47,7 @@ def get_purchase_detail(request, pk):
     })
 
 def new_purchase(request):
-    
+
     if request.method == 'POST':
         form = NewPurchaseForm(request.POST)
         
@@ -69,3 +69,12 @@ def new_purchase(request):
         'form': NewPurchaseForm(),
         'formset': PurchaseDetailInlineFormSet()
     })
+
+def delete_purchase(request, pk):
+    purchase = Purchase.objects.get(pk=pk)
+
+    if purchase is not None:
+        purchase.delete()
+
+        return HttpResponseRedirect(reverse('suppliers:purchases'))
+    
