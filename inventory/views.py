@@ -4,7 +4,9 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 from .forms import ( 
     NewProductForm,
-    NewCategoryForm
+    NewCategoryForm,
+    NewComboForm,
+    ComboDetailInlineFormSet
 )
 from .models import (
     Product, 
@@ -16,6 +18,31 @@ def get_all_combos(request):
     return render(request, 'inventory/combos.html', {
         'combos': Combo.objects.all()
     })
+
+def add_new_combo(request):
+    if request.method == 'POST':
+        form = NewComboForm(request.POST)
+
+        if form.is_valid():
+            new_combo = form.save(commit=False)
+            formset = ComboDetailInlineFormSet(request.POST, instance=new_combo)
+
+            if formset.is_valid():
+                new_combo.save()
+                formset.save()
+                return HttpResponseRedirect(reverse('inventory:combos'))
+    
+    return render(request, 'inventory/combo-add.html', {
+        'form': NewComboForm(),
+        'formset': ComboDetailInlineFormSet()
+    })
+
+def delete_combo(request, pk):
+    combo = Combo.objects.get(pk=pk)
+    
+    if combo is not None:
+        combo.delete()
+        return HttpResponseRedirect(reverse('inventory:combos'))
 
 def get_combo_detail(request, pk):
     return render(request, 'inventory/combo-detail.html', {

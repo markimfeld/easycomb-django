@@ -2,7 +2,7 @@
 
 {% block section-title %}
 Combos
-<a class="btn btn-success btn-sm" href="#"><i class="fas fa-plus-circle">
+<a class="btn btn-success btn-sm" href="{% url 'inventory:new_combo' %}"><i class="fas fa-plus-circle">
         Agregar</i></a>
 {% endblock section-title %}
 
@@ -99,7 +99,7 @@ Combos
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="#" class="btn btn-danger">Borrar</a>
+                                    <a href="{% url 'inventory:delete_combo' combo.id %}" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->

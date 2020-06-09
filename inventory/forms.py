@@ -2,7 +2,9 @@
 from django import forms
 from .models import (
     Product,
-    Category
+    Category,
+    Combo,
+    ComboDetail
 )
 
 
@@ -57,3 +59,51 @@ class NewCategoryForm(forms.ModelForm):
                 }
             )
         }
+
+
+class NewComboForm(forms.ModelForm):
+    class Meta:
+        model = Combo
+        fields = '__all__'
+        exclude = ('product_list',)
+
+        widgets = {
+            'name': forms.TextInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            ),
+            'price': forms.NumberInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            )
+        }
+
+
+class NewComboDetailForm(forms.ModelForm):
+    class Meta:
+        model = ComboDetail
+        fields = '__all__'
+
+        widgets = {
+            'product': forms.Select(
+                attrs = {
+                    'class': 'form-control custom-select'
+                }
+            ), 
+            'quantity': forms.NumberInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            )
+        }
+
+
+ComboDetailInlineFormSet = forms.inlineformset_factory(
+    Combo, 
+    ComboDetail, 
+    form=NewComboDetailForm, 
+    extra=4, 
+    can_delete=True
+)

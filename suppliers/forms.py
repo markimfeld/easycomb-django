@@ -61,5 +61,9 @@ class NewPurchaseDetailForm(forms.ModelForm):
 
 
 PurchaseDetailInlineFormSet = forms.inlineformset_factory(
-    Purchase, PurchaseDetail, form=NewPurchaseDetailForm, extra = 4, can_delete = True
+    Purchase, 
+    PurchaseDetail, 
+    form=NewPurchaseDetailForm, 
+    extra = 4, 
+    can_delete = True
 )
