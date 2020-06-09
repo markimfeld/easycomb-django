@@ -1,4 +1,4 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect
 
 # Create your views here.
@@ -31,10 +31,37 @@ def add_new_combo(request):
                 new_combo.save()
                 formset.save()
                 return HttpResponseRedirect(reverse('inventory:combos'))
-    
+        else:
+            return render(request, 'inventory/combo-edit.html', {
+                'form': NewComboForm(instance=combo),
+                'formset': ComboDetailInlineFormSet(instance=combo)
+            })
+
     return render(request, 'inventory/combo-add.html', {
         'form': NewComboForm(),
         'formset': ComboDetailInlineFormSet()
+    })
+
+def edit_combo(request, pk):
+    combo = Combo.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = NewComboForm(request.POST, instance=combo)
+
+        if form.is_valid():
+            combo_edit = form.save(commit=False)
+            formset = ComboDetailInlineFormSet(request.POST, instance=combo_edit)
+
+            if formset.is_valid():
+                combo_edit.save()
+                formset.save()
+                return HttpResponseRedirect(reverse('inventory:combos'))
+        
+
+    return render(request, 'inventory/combo-edit.html', {
+        'combo': combo,
+        'form': NewComboForm(instance=combo),
+        'formset': ComboDetailInlineFormSet(instance=combo)
     })
 
 def delete_combo(request, pk):
