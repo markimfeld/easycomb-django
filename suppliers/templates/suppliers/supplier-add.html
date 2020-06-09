@@ -54,8 +54,9 @@ Nuevo Proveedor
                 </div>
             </div>
             <!-- /.card-body -->
-            <div class="card-footer d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">Registrar Nuevo Proveedor</button>
+            <div class="card-footer">
+                <a href="{% url 'suppliers:suppliers' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right">Registrar Nuevo Proveedor</button>
             </div>
         </form>
 

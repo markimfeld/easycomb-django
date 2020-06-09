@@ -96,8 +96,9 @@ Nueva Compra
             {{ formset.management_form }}
 
             <!-- /.card-body -->
-            <div class="card-footer d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">Registrar Nueva Compra</button>
+            <div class="card-footer">
+                <a href="{% url 'suppliers:purchases' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right">Registrar Nueva Compra</button>
             </div>
         </form>
 
