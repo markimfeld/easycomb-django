@@ -32,6 +32,7 @@ class Combo(models.Model):
     name = models.CharField(max_length=64)
     price = models.FloatField()
     product_list = models.ManyToManyField(Product, through='ComboDetail')
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -43,4 +44,4 @@ class ComboDetail(models.Model):
     quantity = models.IntegerField()
 
     def __str__(self):
-        return f'{self.combo.name} - {self.product.name} - {self.quantity}'
+        return f'{self.product.name}'

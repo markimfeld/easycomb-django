@@ -15,6 +15,29 @@ from .models import (
 )
 
 def get_all_combos(request):
+    
+    combos = Combo.objects.all()
+
+    ok = 0
+
+    for combo in combos:
+        print('----------------------------')
+        print(f'{combo.name.capitalize()}')
+        print('----------------------------')
+        for item in combo.products.all():
+            if item.product.stock > 0:
+                ok += 1
+        
+        if ok == len(combo.products.all()):
+            combo.status = True
+            combo.save()
+        else:
+            combo.status = False
+            combo.save()
+
+        ok = 0
+        
+
     return render(request, 'inventory/combos.html', {
         'combos': Combo.objects.all()
     })
