@@ -2,7 +2,7 @@
 
 {% block section-title %}
 Proveedores
-<a class="btn btn-success btn-sm" href="#"><i class="fas fa-plus-circle">
+<a class="btn btn-success btn-sm" href="{% url 'suppliers:new_supplier' %}"><i class="fas fa-plus-circle">
         Agregar</i></a>
 {% endblock section-title %}
 
@@ -69,7 +69,7 @@ Proveedores
                                 <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-info btn-sm" href="#">
+                            <a class="btn btn-info btn-sm" href="{% url 'suppliers:edit-supplier' supplier.id %}">
                                 <i class="fas fa-pencil-alt">
                                 </i>
 
@@ -97,7 +97,7 @@ Proveedores
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="#" class="btn btn-danger">Borrar</a>
+                                    <a href="{% url 'suppliers:delete_supplier' supplier.id %}" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->

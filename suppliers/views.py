@@ -10,7 +10,8 @@ from django.shortcuts import render, reverse
 from .forms import (
     NewPurchaseForm,
     NewPurchaseDetailForm,
-    PurchaseDetailInlineFormSet
+    PurchaseDetailInlineFormSet,
+    NewSupplierForm
 )
 from .models import (
     Supplier, 
@@ -21,6 +22,44 @@ from .models import (
 def get_all_suppliers(request):
     return render(request, 'suppliers/suppliers.html', {
         'suppliers': Supplier.objects.all()
+    })
+
+
+def add_new_supplier(request):
+
+    if request.method == 'POST':
+        form = NewSupplierForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('suppliers:suppliers'))
+
+    return render(request, 'suppliers/supplier-add.html', {
+        'form': NewSupplierForm()
+    })
+
+def delete_supplier(request, pk):
+    supplier = Supplier.objects.get(pk=pk)
+
+    if supplier is not None:
+        supplier.delete()
+
+        return HttpResponseRedirect(reverse('suppliers:suppliers'))
+
+def edit_supplier(request, pk):
+    supplier = Supplier.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        
+        form = NewSupplierForm(request.POST, instance=supplier)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('suppliers:suppliers'))
+
+    return render(request, 'suppliers/supplier-edit.html', {
+        'supplier': supplier,
+        'form': NewSupplierForm(instance=supplier)
     })
 
 def get_purchases(request):
@@ -46,7 +85,7 @@ def get_purchase_detail(request, pk):
         'total_purchased': total_purchased
     })
 
-def new_purchase(request):
+def add_new_purchase(request):
 
     if request.method == 'POST':
         form = NewPurchaseForm(request.POST)

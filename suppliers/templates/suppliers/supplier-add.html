@@ -1,0 +1,65 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% load static %}
+
+
+{% block section-title %}
+Nuevo Proveedor
+{% endblock section-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <!-- general form elements -->
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Nuevo Proveedor</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form action="" method="post" role="form">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="{{ form.first_name.name }}">Nombre</label>
+                            {{ form.first_name }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="{{ form.last_name.name }}">Apellido</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.phone.name }}">Celular</label>
+                    {{ form.phone }}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="{{ form.address.name }}">Dirección</label>
+                            {{ form.address }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="{{ form.city.name }}">Ciudad</label>
+                            {{ form.city }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Registrar Nuevo Proveedor</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+<!-- /.content -->
+{% endblock content %}

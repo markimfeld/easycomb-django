@@ -2,8 +2,44 @@ from django import forms
 
 from .models import (
     Purchase,
-    PurchaseDetail
+    PurchaseDetail,
+    Supplier
 )
+
+
+class NewSupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = '__all__'
+
+        widgets = {
+            'first_name': forms.TextInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            ),
+            'last_name': forms.TextInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            ),
+            'phone': forms.NumberInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            ),
+            'address': forms.Select(
+                attrs = {
+                    'class': 'form-control custom-select'
+                }
+            ),
+            'city': forms.Select(
+                attrs = {
+                    'class': 'form-control custom-select'
+                }
+            )
+        }
+
 
 class NewPurchaseForm(forms.ModelForm):
     class Meta:
