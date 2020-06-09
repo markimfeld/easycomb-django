@@ -1,0 +1,86 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% block section-title %}
+Detalle del Pedido
+{% endblock section-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Cliente: {{ order.customer.first_name }}</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
+                    <i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th>
+                            Item
+                        </th>
+                        <th>
+                            Descripción
+                        </th>
+                        <th class="text-center">
+                            Precio Unidad
+                        </th>
+                        <th class="text-center">
+                            Cantidad
+                        </th>
+                        <th class="text-center">
+                            Subtotal
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_detail in order.get_combos.all %}
+                    <tr>
+                        <td>
+                            #
+                        </td>
+                        <td>
+                            <a>
+                                {{ order_detail.combo.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ order_detail.description }}
+                        </td>
+                        <td class="text-center">
+                            ${{ order_detail.combo.price }}
+                        </td>
+                        <td class="text-center">
+                            {{ order_detail.quantity }}
+                        </td>
+                        <td class="text-center">
+                            $total
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <a href="{% url 'orders:orders' %}" class="btn btn-primary float-right">Volver</a>
+        </div>
+    </div>
+    <!-- /.card -->
+
+</section>
+
+<!-- /.content -->
+{% endblock content %}
