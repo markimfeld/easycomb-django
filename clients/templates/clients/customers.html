@@ -2,7 +2,7 @@
 
 {% block section-title %}
 Clientes
-<a class="btn btn-success btn-sm" href="#"><i class="fas fa-plus-circle">
+<a class="btn btn-success btn-sm" href="{% url 'clients:new_customer' %}"><i class="fas fa-plus-circle">
         Agregar</i></a>
 {% endblock section-title %}
 
@@ -96,7 +96,7 @@ Clientes
                                 <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-info btn-sm" href="{% url 'clients:edit-customer' customer.id %}">
+                            <a class="btn btn-info btn-sm" href="{% url 'clients:edit_customer' customer.id %}">
                                 <i class="fas fa-pencil-alt">
                                 </i>
 
