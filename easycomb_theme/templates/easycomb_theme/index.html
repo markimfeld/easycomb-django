@@ -17,26 +17,67 @@ Escritorio
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        <!-- Small Box (Stat card) -->
+        <!-- Small boxes (Stat box) -->
         <div class="row">
-            {% for product in products %}
             <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-success">
+                <!-- small box -->
+                <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>{{ product.stock }}</h3>
+                        <h3>150</h3>
 
-                        <p>{{ product.name }}</p>
+                        <p>Encargos</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer">
-                        Más info <i class="fas fa-arrow-circle-right"></i>
-                    </a>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            {% endfor %}
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ quantity_products }}</h3>
+
+                        <p>Productos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="{% url 'inventory:products' %}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ quantity_combos }}</h3>
+
+                        <p>Combos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="{% url 'inventory:combos' %}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{ quantity_customers}}</h3>
+
+                        <p>Clientes</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="{% url 'clients:customers' %}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
             <!-- ./col -->
         </div>
         <!-- /.row -->
@@ -233,7 +274,8 @@ Escritorio
 <script src="{% static 'easycomb_theme/plugins/moment/moment.min.js' %}"></script>
 <script src="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.js' %}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<script
+    src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
 <script>
     // The Calender
     $('#calendar').datetimepicker({
