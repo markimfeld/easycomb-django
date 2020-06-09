@@ -62,7 +62,7 @@ Pedidos
                             {{ order.date }}
                         </td>
                         <td class="project-state">
-                            <span class="badge badge-warning">Preparar</span>
+                            <span class="badge badge-warning">{{ order.get_status_display }}</span>
                         </td>
                         <td class="text-center">
                             {% if order.status_paid %}
