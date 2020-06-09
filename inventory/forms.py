@@ -86,6 +86,7 @@ class NewComboDetailForm(forms.ModelForm):
         model = ComboDetail
         fields = '__all__'
 
+
         widgets = {
             'product': forms.Select(
                 attrs = {
@@ -104,6 +105,6 @@ ComboDetailInlineFormSet = forms.inlineformset_factory(
     Combo, 
     ComboDetail, 
     form=NewComboDetailForm, 
-    extra=4, 
-    can_delete=True
+    extra=4,
+    max_num=4
 )

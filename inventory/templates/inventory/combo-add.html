@@ -30,6 +30,9 @@ Nueva Combo
 
                 <div class="row">
                     {% for form in formset %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
                     <div class="col col-md-6 col-lg-4">
                         <div class="card card-info">
                             <div class="card-header">

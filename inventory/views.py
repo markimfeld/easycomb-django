@@ -31,11 +31,6 @@ def add_new_combo(request):
                 new_combo.save()
                 formset.save()
                 return HttpResponseRedirect(reverse('inventory:combos'))
-        else:
-            return render(request, 'inventory/combo-edit.html', {
-                'form': NewComboForm(instance=combo),
-                'formset': ComboDetailInlineFormSet(instance=combo)
-            })
 
     return render(request, 'inventory/combo-add.html', {
         'form': NewComboForm(),
@@ -45,28 +40,23 @@ def add_new_combo(request):
 def edit_combo(request, pk):
     combo = Combo.objects.get(pk=pk)
 
-    form = NewComboForm()
-    formset = ComboDetailInlineFormSet()
-
+    # if is a post request
     if request.method == 'POST':
-        form = NewComboForm(request.POST)
+        form = NewComboForm(request.POST, instance=combo)
 
         if form.is_valid():
-            combo_edit = form.save(commit=False)
-            formset = ComboDetailInlineFormSet(request.POST, instance=combo_edit)
+            formset = ComboDetailInlineFormSet(request.POST, instance=combo)
             
             if formset.is_valid():
-                print(formset.cleaned_data)
-    else:
-        print('Esta entrando para GET')
-        form = NewComboForm(instance=combo)
-        formset = ComboDetailInlineFormSet(instance=combo)
+                form.save()
+                formset.save()
 
-
+                return HttpResponseRedirect(reverse('inventory:combos'))
+    # if is a get request
     return render(request, 'inventory/combo-edit.html', {
         'combo': combo,
-        'form': form,
-        'formset': formset
+        'form': NewComboForm(instance=combo),
+        'formset': ComboDetailInlineFormSet(instance=combo)
     })
 
 def delete_combo(request, pk):

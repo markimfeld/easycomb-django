@@ -39,7 +39,7 @@ class Combo(models.Model):
 
 class ComboDetail(models.Model):
     combo = models.ForeignKey(Combo, on_delete=models.CASCADE, related_name='products')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     def __str__(self):
