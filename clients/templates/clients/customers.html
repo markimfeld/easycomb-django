@@ -1,0 +1,167 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% block section-title %}
+Clientes
+<a class="btn btn-success btn-sm" href="{% url 'clients:new_customer' %}"><i class="fas fa-plus-circle">
+        Agregar</i></a>
+{% endblock section-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Clientes</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
+                    <i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Apellido
+                        </th>
+                        <th>
+                            Celular
+                        </th>
+                        <th>
+                            Dirección
+                        </th>
+                        <th>
+                            Ciudad
+                        </th>
+                        <th class="text-center">
+                            Estado
+                        </th>
+                        <th style="width: 20%" class="text-center">
+                            Accion
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>
+                            #
+                        </td>
+                        <td>
+                            <a>
+                                {{ customer.first_name }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ customer.last_name }}
+                        </td>
+                        <td>
+                            {{ customer.phone }}
+                        </td>
+                        <td>
+                            {% if customer.address is not None %}
+                            {{ customer.address }}
+                            {% else %}
+
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if customer.city is not None %}
+                            {{ customer.city }}
+                            {% else %}
+
+                            {% endif %}
+                        </td>
+                        <td class="project-state">
+                            {% if customer.status %}
+                            <span class="badge badge-success">Activo</span>
+                            {% else %}
+                            <span class="badge badge-danger">No activo</span>
+                            {% endif %}
+                        </td>
+                        <td class="project-actions text-center">
+                            <a class="btn btn-primary btn-sm" href="#">
+                                <i class="fas fa-eye">
+                                </i>
+                            </a>
+                            <a class="btn btn-info btn-sm" href="{% url 'clients:edit_customer' customer.id %}">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+
+                            </a>
+                            {% if customer.status %}
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
+                                data-target="#modal-default{{ customer.id }}">
+                                <i class="fas fa-minus-circle"></i>
+                            </a>
+
+                            {% else %}
+                            <a class="btn btn-success btn-sm" href="#" data-toggle="modal"
+                                data-target="#modal-default{{ customer.id }}">
+                                <i class="fas fa-check-circle"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <!-- Modal to Delete customer -->
+                    <div class="modal fade" id="modal-default{{ customer.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    {% if customer.status %}
+                                        <h3 class="modal-title">Desactivar Cliente</h3>
+                                    {% else %}
+                                        <h3 class="modal-title">Activar Cliente</h3>
+                                    {% endif %}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if customer.status %}
+                                        <p class="h6">Estas seguro de desactivar el cliente con nombre
+                                            <strong>{{ customer.first_name }}</strong>?</p>
+                                    {% else %}
+                                        <p class="h6">Estas seguro de activar el cliente con nombre
+                                            <strong>{{ customer.first_name }}</strong>?</p>
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    {% if customer.status %}
+                                        <a href="{% url 'clients:deactivate_customer' customer.id %}"
+                                            class="btn btn-danger">Desactivar</a>
+                                    {% else %}
+                                        <a href="{% url 'clients:activate_customer' customer.id %}"
+                                            class="btn btn-success">Activar</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+</section>
+
+<!-- /.content -->
+{% endblock content %}
