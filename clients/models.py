@@ -7,6 +7,7 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64, blank=True)
     phone = models.CharField(max_length=64, blank=True)
+    status = models.BooleanField(default=True)
     city = models.ForeignKey(
         City, 
         on_delete=models.CASCADE, 

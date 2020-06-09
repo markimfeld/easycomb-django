@@ -34,55 +34,69 @@ Clientes
                             Nombre
                         </th>
                         <th>
-                            Telefono
+                            Apellido
                         </th>
                         <th>
-                            Direccion
+                            Celular
+                        </th>
+                        <th>
+                            Dirección
                         </th>
                         <th>
                             Ciudad
                         </th>
+                        <th>
+                            Estado
+                        </th>
+                        <th>
+                            Accion
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for supplier in suppliers %}
+                    {% for customer in customers %}
                     <tr>
                         <td>
                             #
                         </td>
                         <td>
                             <a>
-                                {{ supplier.first_name }}
+                                {{ customer.first_name }}
                             </a>
                         </td>
                         <td>
-                            {{ supplier.phone }}
+                            {{ customer.last_name }}
                         </td>
                         <td>
-                            {{ supplier.address }}
+                            {{ customer.phone }}
                         </td>
                         <td>
-                            {{ supplier.city }}
+                            {{ customer.address }}
+                        </td>
+                        <td>
+                            {{ customer.city }}
+                        </td><td>
+                            {{ customer.status }}
                         </td>
                         <td class="project-actions text-center">
                             <a class="btn btn-primary btn-sm" href="#">
                                 <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-info btn-sm" href="{% url 'suppliers:edit-supplier' supplier.id %}">
+                            <a class="btn btn-info btn-sm" href="{% url 'customers:edit-customer' customer.id %}">
                                 <i class="fas fa-pencil-alt">
                                 </i>
 
                             </a>
                             <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
-                                data-target="#modal-default{{ supplier.id }}">
+                                data-target="#modal-default{{ customer.id }}">
                                 <i class="fas fa-trash">
                                 </i>
                             </a>
                         </td>
                     </tr>
-                    <!-- Modal to Delete supplier -->
-                    <div class="modal fade" id="modal-default{{ supplier.id }}">
+                    <!-- Modal to Delete customer -->
+                    <div class="modal fade" id="modal-default{{ customer.id }}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -92,12 +106,12 @@ Clientes
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el suppliero con nombre
-                                        <strong>{{ supplier.first_name }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el customero con nombre
+                                        <strong>{{ customer.first_name }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="{% url 'suppliers:delete_supplier' supplier.id %}" class="btn btn-danger">Borrar</a>
+                                    <a href="{% url 'customers:delete_customer' customer.id %}" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->
