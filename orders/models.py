@@ -34,4 +34,5 @@ class OrderDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, related_name='products')
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='get_combos')
     description = models.TextField(blank=True)
+    price_unit = models.FloatField()
     quantity = models.IntegerField(default=1)    
