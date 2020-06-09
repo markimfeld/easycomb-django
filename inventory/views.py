@@ -17,13 +17,8 @@ from .models import (
 def get_all_combos(request):
     
     combos = Combo.objects.all()
-
     ok = 0
-
     for combo in combos:
-        print('----------------------------')
-        print(f'{combo.name.capitalize()}')
-        print('----------------------------')
         for item in combo.products.all():
             if item.product.stock > 0:
                 ok += 1
