@@ -45,23 +45,28 @@ def add_new_combo(request):
 def edit_combo(request, pk):
     combo = Combo.objects.get(pk=pk)
 
+    form = NewComboForm()
+    formset = ComboDetailInlineFormSet()
+
     if request.method == 'POST':
-        form = NewComboForm(request.POST, instance=combo)
+        form = NewComboForm(request.POST)
 
         if form.is_valid():
             combo_edit = form.save(commit=False)
             formset = ComboDetailInlineFormSet(request.POST, instance=combo_edit)
-
+            
             if formset.is_valid():
-                combo_edit.save()
-                formset.save()
-                return HttpResponseRedirect(reverse('inventory:combos'))
-        
+                print(formset.cleaned_data)
+    else:
+        print('Esta entrando para GET')
+        form = NewComboForm(instance=combo)
+        formset = ComboDetailInlineFormSet(instance=combo)
+
 
     return render(request, 'inventory/combo-edit.html', {
         'combo': combo,
-        'form': NewComboForm(instance=combo),
-        'formset': ComboDetailInlineFormSet(instance=combo)
+        'form': form,
+        'formset': formset
     })
 
 def delete_combo(request, pk):
