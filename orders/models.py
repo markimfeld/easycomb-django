@@ -21,15 +21,17 @@ class Order(models.Model):
     date = models.DateField(auto_now_add=True)
     paid_status = models.BooleanField(default=False)
     money_received = models.FloatField(default=0)
-    total = models.FloatField()
+    total = models.FloatField(default=0)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     combos = models.ManyToManyField(Combo, through='OrderDetail')
     products = models.ManyToManyField(Product, through='OrderDetail')
 
+    def __str__(self):
+        return f'{self.id} - {self.customer.first_name}'
 
 class OrderDetail(models.Model):
-    combo = models.ForeignKey(Combo, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    combo = models.ForeignKey(Combo, on_delete=models.CASCADE, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     quantity = models.IntegerField(default=1)    

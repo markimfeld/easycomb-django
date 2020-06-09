@@ -55,17 +55,21 @@ Pedidos
                         </td>
                         <td>
                             <a>
-                                {{ order.customer.name }}
+                                {{ order.customer.first_name }}
                             </a>
                         </td>
                         <td>
-                            ${{ order.date }}
+                            {{ order.date }}
                         </td>
                         <td class="project-state">
                             <span class="badge badge-warning">Preparar</span>
                         </td>
-                        <td>
-                            ${{ order.paid_status }}
+                        <td class="text-center">
+                            {% if order.status_paid %}
+                                <span class="badge badge-success">Si</span>
+                            {% else %}
+                                <span class="badge badge-danger">No</span>
+                            {% endif %}
                         </td>
                         <td class="project-actions text-center">
                             <a class="btn btn-primary btn-sm" href="#">
