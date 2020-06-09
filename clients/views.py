@@ -31,6 +31,7 @@ def edit_customer(request, pk):
 
 
     return render(request, 'clients/customer-edit.html', {
+        'customer': customer,
         'form': NewCustomerForm(instance=customer)
     }) 
 
