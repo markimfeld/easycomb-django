@@ -72,16 +72,16 @@ Clientes
                         </td>
                         <td>
                             {% if customer.address is not None %}
-                                {{ customer.address }}
+                            {{ customer.address }}
                             {% else %}
 
                             {% endif %}
                         </td>
                         <td>
                             {% if customer.city is not None %}
-                                {{ customer.city }}
+                            {{ customer.city }}
                             {% else %}
-                            
+
                             {% endif %}
                         </td>
                         <td class="project-state">
@@ -101,11 +101,18 @@ Clientes
                                 </i>
 
                             </a>
+                            {% if customer.status %}
                             <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
                                 data-target="#modal-default{{ customer.id }}">
-                                <i class="fas fa-trash">
-                                </i>
+                                <i class="fas fa-minus-circle"></i>
                             </a>
+
+                            {% else %}
+                            <a class="btn btn-success btn-sm" href="#" data-toggle="modal"
+                                data-target="#modal-default{{ customer.id }}">
+                                <i class="fas fa-check-circle"></i>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                     <!-- Modal to Delete customer -->
@@ -113,18 +120,33 @@ Clientes
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">Borrar Cliente</h3>
+                                    {% if customer.status %}
+                                        <h3 class="modal-title">Desactivar Cliente</h3>
+                                    {% else %}
+                                        <h3 class="modal-title">Activar Cliente</h3>
+                                    {% endif %}
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el cliente con nombre
-                                        <strong>{{ customer.first_name }}</strong>?</p>
+                                    {% if customer.status %}
+                                        <p class="h6">Estas seguro de desactivar el cliente con nombre
+                                            <strong>{{ customer.first_name }}</strong>?</p>
+                                    {% else %}
+                                        <p class="h6">Estas seguro de activar el cliente con nombre
+                                            <strong>{{ customer.first_name }}</strong>?</p>
+                                    {% endif %}
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="{% url 'clients:delete_customer' customer.id %}" class="btn btn-danger">Borrar</a>
+                                    {% if customer.status %}
+                                        <a href="{% url 'clients:deactivate_customer' customer.id %}"
+                                            class="btn btn-danger">Desactivar</a>
+                                    {% else %}
+                                        <a href="{% url 'clients:activate_customer' customer.id %}"
+                                            class="btn btn-success">Activar</a>
+                                    {% endif %}
                                 </div>
                             </div>
                             <!-- /.modal-content -->

@@ -6,6 +6,7 @@ class NewCustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = '__all__'
+        exclude = ('status',)
         widgets = {
             'first_name': forms.TextInput(
                 attrs = {
