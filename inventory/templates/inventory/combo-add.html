@@ -64,8 +64,9 @@ Nueva Combo
             {{ formset.management_form }}
 
             <!-- /.card-body -->
-            <div class="card-footer d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">Crear Nuevo Combo</button>
+            <div class="card-footer">
+                <a href="{% url 'inventory:combos' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right">Crear Nuevo Combo</button>
             </div>
         </form>
 
