@@ -11,7 +11,7 @@ Detalle del Pedido
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Cliente: {{ order.customer.first_name }}</h3>
+            <h3 class="card-title">Cliente: <a href="#"><span class="text-bold">{{ order.customer.first_name }} {{ order.customer.last_name }}</span></a></h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
@@ -75,7 +75,7 @@ Detalle del Pedido
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <a href="{% url 'orders:orders' %}" class="btn btn-primary float-right">Volver</a>
+            <a href="{% url 'orders:orders' %}" class="btn btn-secondary float-right">Volver</a>
         </div>
     </div>
     <!-- /.card -->
