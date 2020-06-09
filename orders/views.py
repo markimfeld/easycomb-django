@@ -16,14 +16,14 @@ def get_all_orders(request):
 
 def get_order_details(request, pk):
     
+    # get order's details and calculate subtotals
+    order_details = Order.objects.get(pk=pk).get_combos.all().annotate(
+        subtotal = ExpressionWrapper(
+            F('price_unit') * F('quantity'), output_field=FloatField()
+        )
+    )
     
-    # subtotals = Order.objects.get(pk=pk).get_combos.all().annotate(
-    #     subtotal = ExpressionWrapper(
-    #         F()
-    #     )
-    # )
-
 
     return render(request, 'orders/order-details.html', {
-        'order': Order.objects.get(pk=pk)
+        'order_details': order_details
     })

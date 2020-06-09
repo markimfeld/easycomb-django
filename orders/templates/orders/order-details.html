@@ -46,7 +46,7 @@ Detalle del Pedido
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order_detail in order.get_combos.all %}
+                    {% for order_detail in order_details %}
                     <tr>
                         <td>
                             #
@@ -60,13 +60,13 @@ Detalle del Pedido
                             {{ order_detail.description }}
                         </td>
                         <td class="text-center">
-                            ${{ order_detail.combo.price }}
+                            ${{ order_detail.price_unit }}
                         </td>
                         <td class="text-center">
                             {{ order_detail.quantity }}
                         </td>
                         <td class="text-center">
-                            $total
+                            ${{ order_detail.subtotal }}
                         </td>
                     </tr>
                     {% endfor %}
