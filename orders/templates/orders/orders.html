@@ -59,7 +59,7 @@ Pedidos
                             </a>
                         </td>
                         <td>
-                            {{ order.date }}
+                            {{ order.date|date:"d F, Y" }}
                         </td>
                         <td class="project-state">
                             <span class="badge badge-warning">{{ order.get_status_display }}</span>
