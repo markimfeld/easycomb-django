@@ -1,0 +1,80 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% load static %}
+
+{% block section-title %}
+Nuevo Pedido
+{% endblock section-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <!-- general form elements -->
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Nuevo Pedido</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form action="" method="post" role="form">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="{{ form.customer.name }}">Cliente</label>
+                    {{ form.customer }}
+                </div>
+
+                <div class="row">
+                    {% for form in formset %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    <div class="col col-md-6 col-lg-4">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Item</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                        data-toggle="tooltip" title="Collapse">
+                                        <i class="fas fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="{{ form.combo.name }}">Combo</label>
+                                    {{ form.combo }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.product.name }}">Producto</label>
+                                    {{ form.product }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.description.name }}">Descripción</label>
+                                    {{ form.description }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.quantity.name }}">Cantidad</label>
+                                    {{ form.quantity }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Este miniformulario maneja el inline -->
+            {{ formset.management_form }}
+
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <a href="{% url 'orders:orders' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right">Registrar Nuevo Pedido</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+<!-- /.content -->
+{% endblock content %}
