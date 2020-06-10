@@ -26,7 +26,7 @@ Detalle del Pedido
                 <thead>
                     <tr>
                         <th style="width: 1%">
-                            #
+                            ID
                         </th>
                         <th>
                             Item
@@ -49,7 +49,7 @@ Detalle del Pedido
                     {% for order_detail in order_details %}
                     <tr>
                         <td>
-                            #
+                            {{ order_detail.combo.id }}
                         </td>
                         <td>
                             <a>
@@ -70,12 +70,32 @@ Detalle del Pedido
                         </td>
                     </tr>
                     {% endfor %}
+                    <tr class="bg-gray-dark">
+                        <td style="width: 1%">
+                            
+                        </td>
+                        <td>
+                            <span class="h5 text-bold">Total</span>
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td class="text-center">
+                            <span class="text-bold h5">{{ total_items }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="text-bold h5">${{ total }}</span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <a href="{% url 'orders:orders' %}" class="btn btn-secondary float-right">Volver</a>
+            <a href="{% url 'orders:orders' %}" class="btn btn-primary float-right">Volver</a>
         </div>
     </div>
     <!-- /.card -->

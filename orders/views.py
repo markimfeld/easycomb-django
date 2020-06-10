@@ -25,8 +25,18 @@ def get_order_details(request, pk):
         )
     )
 
+    total_items = 0
+    for order_detail in order.get_combos.all():
+        total_items += order_detail.quantity
+    
+    total = 0
+    for order_detail in order_details:
+        total += order_detail.subtotal
+
 
     return render(request, 'orders/order-details.html', {
+        'total': total,
+        'total_items': total_items,
         'order': order,
         'order_details': order_details
     })
