@@ -45,7 +45,7 @@ class NewPurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
         fields = '__all__'
-        exclude = ('products', )
+        # exclude = ('products', )
 
         widgets = {
             'supplier': forms.Select(

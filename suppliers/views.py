@@ -24,7 +24,6 @@ def get_all_suppliers(request):
         'suppliers': Supplier.objects.all()
     })
 
-
 def add_new_supplier(request):
 
     if request.method == 'POST':
@@ -91,11 +90,10 @@ def add_new_purchase(request):
         form = NewPurchaseForm(request.POST)
         
         if form.is_valid():
-            purchase = form.save(commit=False)
+            purchase = form.save()
             formset = PurchaseDetailInlineFormSet(request.POST, instance=purchase)
 
             if formset.is_valid():
-                purchase.save()
                 new_purchases = formset.save(commit=False)
                 for new_purchase in new_purchases:
                     # increase the product stock
