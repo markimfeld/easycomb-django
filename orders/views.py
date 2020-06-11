@@ -75,3 +75,12 @@ def add_new_order(request):
         'form': NewOrderForm(),
         'formset': OrderDetailInlineFormSet()
     })
+
+
+def delete_order(request, pk):
+    order = Order.objects.get(pk=pk)
+
+    if order is not None:
+        order.delete()
+
+        return HttpResponseRedirect(reverse('orders:orders'))

@@ -100,11 +100,11 @@ Pedidos
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el pedido con id <strong>{{ order.id }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el pedido con ID <strong>{{ order.id }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <a href="#" class="btn btn-danger">Borrar</a>
+                                    <a href="{% url 'orders:delete_order' order.id %}" class="btn btn-danger">Borrar</a>
                                 </div>
                             </div>
                             <!-- /.modal-content -->
