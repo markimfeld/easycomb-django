@@ -20,7 +20,7 @@ def get_all_combos(request):
     ok = 0
     for combo in combos:
         for item in combo.products.all():
-            if item.product.stock > 0:
+            if item.product.stock >= item.quantity:
                 ok += 1
         
         if ok == len(combo.products.all()):
