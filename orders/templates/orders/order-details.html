@@ -64,24 +64,38 @@ Detalle del Pedido
                     {% for order_detail in order_details %}
                     <tr>
                         <td>
-                            {{ order_detail.combo.id }}
+                            {% if order_detail.combo is not None %}
+                                {{ order_detail.combo.id }}
+                            {% else %}
+                                {{ order_detail.product.id }}
+                            {% endif %}
                         </td>
                         <td>
-                            <a>
+                            {% if order_detail.combo is not None %}
                                 {{ order_detail.combo.name }}
-                            </a>
+                            {% else %}
+                                {{ order_detail.product.name }}
+                            {% endif %}
                         </td>
                         <td>
                             {{ order_detail.description }}
                         </td>
                         <td class="text-center">
-                            ${{ order_detail.price_unit }}
+                            {% if order_detail.combo is not None %}
+                                ${{ order_detail.price_combo }}
+                            {% else %}
+                                ${{ order_detail.price_product }}
+                            {% endif %}
                         </td>
                         <td class="text-center">
                             {{ order_detail.quantity }}
                         </td>
                         <td class="text-center">
-                            ${{ order_detail.subtotal }}
+                            {% if order_detail.combo is not None %}
+                                ${{ order_detail.subtotal_combos }}
+                            {% else %}
+                                ${{ order_detail.subtotal_products }}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

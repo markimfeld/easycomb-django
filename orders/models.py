@@ -21,7 +21,6 @@ class Order(models.Model):
     date = models.DateField(auto_now_add=True)
     paid_status = models.BooleanField(default=False)
     money_received = models.FloatField(default=0)
-    total = models.FloatField(default=0)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     combos = models.ManyToManyField(Combo, through='OrderDetail')
     products = models.ManyToManyField(Product, through='OrderDetail')
@@ -31,8 +30,17 @@ class Order(models.Model):
 
 class OrderDetail(models.Model):
     combo = models.ForeignKey(Combo, on_delete=models.CASCADE, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, related_name='products')
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='get_combos')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='get_products')
     description = models.TextField(blank=True)
-    price_unit = models.FloatField()
-    quantity = models.IntegerField(default=1)    
+    price_combo = models.FloatField(default=0)
+    price_product = models.FloatField(default=0)
+    quantity = models.IntegerField(default=1)  
+
+    def __str__(self):
+        msg = ''
+        if self.combo is None:
+            msg = f'Order: {self.order.id} - {self.product.name} - {self.price_product} - {self.quantity}'
+        elif self.product is None:
+            msg = f'Order: {self.order.id} - {self.combo.name} - {self.price_combo} - {self.quantity}'
+        return msg

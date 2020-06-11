@@ -23,12 +23,17 @@ Nuevo Pedido
                     <label for="{{ form.customer.name }}">Cliente</label>
                     {{ form.customer }}
                 </div>
-
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch">
+                        <label class="custom-control-label" for="customSwitch">Cambiar a Productos</label>
+                    </div>
+                </div>
                 <div class="row">
                     {% for form in formset %}
-                        {% for hidden in form.hidden_fields %}
-                            {{ hidden }}
-                        {% endfor %}
+                    {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                    {% endfor %}
                     <div class="col col-md-6 col-lg-4">
                         <div class="card card-info">
                             <div class="card-header">
@@ -41,11 +46,11 @@ Nuevo Pedido
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="form-group combos">
                                     <label for="{{ form.combo.name }}">Combo</label>
                                     {{ form.combo }}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group products">
                                     <label for="{{ form.product.name }}">Producto</label>
                                     {{ form.product }}
                                 </div>
@@ -78,3 +83,27 @@ Nuevo Pedido
 </section>
 <!-- /.content -->
 {% endblock content %}
+
+{% block page-script %}
+<script>
+    $(document).ready((id) => {
+        $(`.products`).hide();
+
+        $(`#customSwitch`).click(() => {
+            if ($('#customSwitch').is(":checked")) {
+                $('#customSwitch').prop("checked", true);
+            } else {
+                $('#customSwitch').prop("checked", false);
+            }
+
+            if ($('#customSwitch').is(":checked")) {
+                $(`.combos`).hide();
+                $('.products').show();
+            } else {
+                $(`.combos`).show();
+                $('.products').hide();
+            }
+        });
+    })
+</script>
+{% endblock page-script %}

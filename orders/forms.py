@@ -7,7 +7,7 @@ class NewOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
-        exclude = ('status','paid_status', 'money_received', 'total', 'combos', 'products')
+        exclude = ('status','paid_status', 'money_received', 'combos', 'products')
         widgets = {
             'customer': forms.Select(
                 attrs = {
@@ -20,7 +20,7 @@ class NewOrderDetailForm(forms.ModelForm):
     class Meta:
         model = OrderDetail
         fields = '__all__'
-        exclude = ('price_unit',)
+        exclude = ('price_combo', 'price_product')
         widgets = {
             'combo': forms.Select(
                 attrs = {
