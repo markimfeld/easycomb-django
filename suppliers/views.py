@@ -89,10 +89,11 @@ def add_new_purchase(request):
     if request.method == 'POST':
         form = NewPurchaseForm(request.POST)
         
+        print(form.is_valid())
+
         if form.is_valid():
             purchase = form.save()
             formset = PurchaseDetailInlineFormSet(request.POST, instance=purchase)
-
             if formset.is_valid():
                 new_purchases = formset.save(commit=False)
                 for new_purchase in new_purchases:

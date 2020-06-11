@@ -45,7 +45,7 @@ class NewPurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
         fields = '__all__'
-        # exclude = ('products', )
+        exclude = ('products', )
 
         widgets = {
             'supplier': forms.Select(
@@ -53,7 +53,7 @@ class NewPurchaseForm(forms.ModelForm):
                     'class': 'form-control custom-select'
                 }
             ),
-            'date': forms.TextInput(
+            'date': forms.DateInput(
                 attrs = {
                     'class': 'form-control datetimepicker-input',
                     'data-target': '#reservationdate'
@@ -71,6 +71,7 @@ class NewPurchaseDetailForm(forms.ModelForm):
     class Meta:
         model = PurchaseDetail
         fields = '__all__'
+        # exclude = ('purchase', )
 
         widgets = {
             'product': forms.Select(
@@ -100,6 +101,5 @@ PurchaseDetailInlineFormSet = forms.inlineformset_factory(
     Purchase, 
     PurchaseDetail, 
     form=NewPurchaseDetailForm, 
-    extra = 4, 
-    can_delete = True
+    extra = 4
 )
