@@ -11,6 +11,7 @@ urlpatterns = [
     path('delete/combo/<int:pk>', views.delete_combo, name='delete_combo'),
     path('products', views.get_all_products, name='products'),
     path('new-product', views.add_new_product, name='new_product'),
+    path('edit-product/<int:pk>', views.edit_product, name='edit_product'),
     path('delete/product/<int:pk>', views.delete_product, name="delete_product"),
     path('categories', views.get_all_categories, name="categories"),
     path('new-category', views.add_new_category, name='new_category'),

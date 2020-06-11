@@ -113,6 +113,20 @@ def add_new_product(request):
         'form': NewProductForm()
     })
 
+def edit_product(request, pk):
+    product = Product.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = NewProductForm(request.POST, request.FILES, instance=product)
+
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect(reverse('inventory:products'))
+
+    return render(request, 'inventory/product-edit.html', {
+        'form': NewProductForm(instance=product),
+        'product': product
+    })
 
 def delete_product(request, pk):
     product = Product.objects.get(pk=pk)
