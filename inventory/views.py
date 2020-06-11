@@ -136,12 +136,10 @@ def delete_product(request, pk):
 
         return HttpResponseRedirect(reverse('inventory:products'))
 
-
 def get_all_categories(request):
     return render(request, 'inventory/categories.html', {
         'categories': Category.objects.all()
     })
-
 
 def add_new_category(request):
     
