@@ -21,7 +21,7 @@ class Order(models.Model):
     date = models.DateField(auto_now_add=True)
     paid_status = models.BooleanField(default=False)
     money_received = models.FloatField(default=0)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders', default=0)
     combos = models.ManyToManyField(Combo, through='OrderDetail')
     products = models.ManyToManyField(Product, through='OrderDetail')
 

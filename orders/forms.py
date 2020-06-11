@@ -11,7 +11,7 @@ class NewOrderForm(forms.ModelForm):
         widgets = {
             'customer': forms.Select(
                 attrs = {
-                    'class': 'form-control custom-select'
+                    'class': 'form-control select2bs4'
                 }
             )
         }
