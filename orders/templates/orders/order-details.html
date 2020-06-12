@@ -25,14 +25,16 @@ Detalle del Pedido
             </div>
             <div class="row">
                 <div class="col d-flex flex-column">
-                    <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="#"><span class="text-bold h2 text-info">{{ order.customer.first_name }}
-                        {{ order.customer.last_name }}</span></a></h3>
-                        <h4 class="card-title text-muted">
-                            <span class="underline">Nro de Pedido: {{ order.id }}</span>
-                        </h4>
+                    <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="#"><span
+                                class="text-bold h2 text-info">{{ order.customer.first_name }}
+                                {{ order.customer.last_name }}</span></a></h3>
+                    <h4 class="card-title text-muted">
+                        <span class="underline">Nro de Pedido: {{ order.id }}</span>
+                    </h4>
                 </div>
                 <div class="col">
-                    <h3 class="card-title float-right"><span class="text-bold h3">Fecha: </span><span class="text-bold h2">{{ order.date|date:"d-m-Y" }}</span></h3>
+                    <h3 class="card-title float-right"><span class="text-bold h3">Fecha: </span><span
+                            class="text-bold h2">{{ order.date|date:"d-m-Y" }}</span></h3>
                 </div>
             </div>
         </div>
@@ -65,16 +67,16 @@ Detalle del Pedido
                     <tr>
                         <td>
                             {% if order_detail.combo is not None %}
-                                {{ order_detail.combo.id }}
+                            {{ order_detail.combo.id }}
                             {% else %}
-                                {{ order_detail.product.id }}
+                            {{ order_detail.product.id }}
                             {% endif %}
                         </td>
                         <td>
                             {% if order_detail.combo is not None %}
-                                {{ order_detail.combo.name }}
+                            {{ order_detail.combo.name }}
                             {% else %}
-                                {{ order_detail.product.name }}
+                            {{ order_detail.product.name }}
                             {% endif %}
                         </td>
                         <td>
@@ -82,9 +84,9 @@ Detalle del Pedido
                         </td>
                         <td class="text-center">
                             {% if order_detail.combo is not None %}
-                                ${{ order_detail.price_combo }}
+                            ${{ order_detail.price_combo }}
                             {% else %}
-                                ${{ order_detail.price_product }}
+                            ${{ order_detail.price_product }}
                             {% endif %}
                         </td>
                         <td class="text-center">
@@ -92,9 +94,9 @@ Detalle del Pedido
                         </td>
                         <td class="text-center">
                             {% if order_detail.combo is not None %}
-                                ${{ order_detail.subtotal_combos }}
+                            ${{ order_detail.subtotal_combos }}
                             {% else %}
-                                ${{ order_detail.subtotal_products }}
+                            ${{ order_detail.subtotal_products }}
                             {% endif %}
                         </td>
                     </tr>
@@ -113,10 +115,14 @@ Detalle del Pedido
 
                         </td>
                         <td class="text-center">
-                            <span class="text-bold h5">{{ total_items }}</span>
+                            <span class="text-bold h5">{{ quantity_total }}</span>
                         </td>
                         <td class="text-center">
-                            <span class="text-bold h5">${{ total }}</span>
+                            {% if combos_total > 0 %}
+                            <span class="text-bold h5">${{ combos_total }}</span>
+                            {% else %}
+                            <span class="text-bold h5">${{ products_total }}</span>
+                            {% endif %}
                         </td>
                     </tr>
                 </tbody>

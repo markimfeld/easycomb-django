@@ -2,7 +2,8 @@ from django.db import transaction
 from django.db.models import (
     F,
     ExpressionWrapper,
-    FloatField
+    FloatField,
+    Sum
 )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
@@ -37,19 +38,15 @@ def get_order_details(request, pk):
         )
     )
 
-    total_items = 0
-    for order_detail in order.get_products.all():
-        total_items += order_detail.quantity
-    
-    total = 0
-    for order_detail in order_details:
-        total += order_detail.subtotal_combos
-        total += order_detail.subtotal_products
+    quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
 
+    total_combo = order_details.aggregate(Sum('subtotal_combos'))
+    total_products = order_details.aggregate(Sum('subtotal_products'))
 
     return render(request, 'orders/order-details.html', {
-        'total': total,
-        'total_items': total_items,
+        'combos_total': total_combo['subtotal_combos__sum'],
+        'products_total': total_products['subtotal_products__sum'],
+        'quantity_total': quantity_sum['quantity__sum'],
         'order': order,
         'order_details': order_details
     })
