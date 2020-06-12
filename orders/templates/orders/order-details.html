@@ -7,135 +7,181 @@ Detalle del Pedido
 {% block content %}
 <!-- Main content -->
 <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card-tools float-right">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                        data-toggle="tooltip" title="Collapse">
+                                        <i class="fas fa-minus"></i></button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove"
+                                        data-toggle="tooltip" title="Remove">
+                                        <i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col d-flex flex-column">
+                                <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="#"><span
+                                            class="text-bold h2 text-info">{{ order.customer.first_name }}
+                                            {{ order.customer.last_name }}</span></a></h3>
+                                <h4 class="card-title text-muted">
+                                    <span class="underline">Nro de Pedido: {{ order.id }}</span>
+                                </h4>
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title float-right"><span class="text-bold h3">Fecha: </span><span
+                                        class="text-bold h2">{{ order.date|date:"d-m-Y" }}</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">
+                                        ID
+                                    </th>
+                                    <th>
+                                        Item
+                                    </th>
+                                    <th>
+                                        Descripción
+                                    </th>
+                                    <th class="text-center">
+                                        Precio Unidad
+                                    </th>
+                                    <th class="text-center">
+                                        Cantidad
+                                    </th>
+                                    <th class="text-center">
+                                        Subtotal
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order_detail in order_details %}
+                                <tr>
+                                    <td>
+                                        {% if order_detail.combo is not None %}
+                                        {{ order_detail.combo.id }}
+                                        {% else %}
+                                        {{ order_detail.product.id }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if order_detail.combo is not None %}
+                                        {{ order_detail.combo.name }}
+                                        {% else %}
+                                        {{ order_detail.product.name }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ order_detail.description }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if order_detail.combo is not None %}
+                                        ${{ order_detail.price_combo }}
+                                        {% else %}
+                                        ${{ order_detail.price_product }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ order_detail.quantity }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if order_detail.combo is not None %}
+                                        ${{ order_detail.subtotal_combos }}
+                                        {% else %}
+                                        ${{ order_detail.subtotal_products }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tr class="bg-gray-dark">
+                                    <td style="width: 1%">
 
-    <!-- Default box -->
-    <div class="card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col">
-                    <div class="card-tools float-right">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
-                            title="Collapse">
-                            <i class="fas fa-minus"></i></button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
-                            title="Remove">
-                            <i class="fas fa-times"></i></button>
+                                    </td>
+                                    <td>
+                                        <span class="h5 text-bold">Total</span>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="text-bold h5">{{ quantity_total }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if combos_total > 0 %}
+                                        <span class="text-bold h5">${{ combos_total }}</span>
+                                        {% else %}
+                                        <span class="text-bold h5">${{ products_total }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <!-- Button trigger modal -->
+                    <div class="card-footer">
+                        <a href="#" class="btn btn-warning float-left" data-toggle="modal"
+                            data-target="#exampleModal">Registrar
+                            Dinero Recibido</a>
+
+                        <a href="{% url 'orders:orders' %}" class="btn btn-info float-right">Volver</a>
                     </div>
                 </div>
+                <!-- /.card -->
             </div>
-            <div class="row">
-                <div class="col d-flex flex-column">
-                    <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="#"><span
-                                class="text-bold h2 text-info">{{ order.customer.first_name }}
-                                {{ order.customer.last_name }}</span></a></h3>
-                    <h4 class="card-title text-muted">
-                        <span class="underline">Nro de Pedido: {{ order.id }}</span>
-                    </h4>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Entregas del Pedido</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">ID</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>2020-05-03</td>
+                                    <td>
+                                        <span class="badge bg-danger">$180</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>2020-05-11</td>
+                                    <td>
+                                        <span class="badge bg-danger">$360</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
-                <div class="col">
-                    <h3 class="card-title float-right"><span class="text-bold h3">Fecha: </span><span
-                            class="text-bold h2">{{ order.date|date:"d-m-Y" }}</span></h3>
-                </div>
+                <!-- /.card -->
             </div>
+            <!-- /.col -->
         </div>
-        <div class="card-body p-0">
-            <table class="table table-striped projects">
-                <thead>
-                    <tr>
-                        <th style="width: 1%">
-                            ID
-                        </th>
-                        <th>
-                            Item
-                        </th>
-                        <th>
-                            Descripción
-                        </th>
-                        <th class="text-center">
-                            Precio Unidad
-                        </th>
-                        <th class="text-center">
-                            Cantidad
-                        </th>
-                        <th class="text-center">
-                            Subtotal
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order_detail in order_details %}
-                    <tr>
-                        <td>
-                            {% if order_detail.combo is not None %}
-                            {{ order_detail.combo.id }}
-                            {% else %}
-                            {{ order_detail.product.id }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order_detail.combo is not None %}
-                            {{ order_detail.combo.name }}
-                            {% else %}
-                            {{ order_detail.product.name }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ order_detail.description }}
-                        </td>
-                        <td class="text-center">
-                            {% if order_detail.combo is not None %}
-                            ${{ order_detail.price_combo }}
-                            {% else %}
-                            ${{ order_detail.price_product }}
-                            {% endif %}
-                        </td>
-                        <td class="text-center">
-                            {{ order_detail.quantity }}
-                        </td>
-                        <td class="text-center">
-                            {% if order_detail.combo is not None %}
-                            ${{ order_detail.subtotal_combos }}
-                            {% else %}
-                            ${{ order_detail.subtotal_products }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    <tr class="bg-gray-dark">
-                        <td style="width: 1%">
-
-                        </td>
-                        <td>
-                            <span class="h5 text-bold">Total</span>
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td class="text-center">
-                            <span class="text-bold h5">{{ quantity_total }}</span>
-                        </td>
-                        <td class="text-center">
-                            {% if combos_total > 0 %}
-                            <span class="text-bold h5">${{ combos_total }}</span>
-                            {% else %}
-                            <span class="text-bold h5">${{ products_total }}</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
-        <!-- Button trigger modal -->
-        <div class="card-footer">
-            <a href="#" class="btn btn-warning float-left" data-toggle="modal" data-target="#exampleModal">Registrar
-                Dinero Recibido</a>
-            <a href="{% url 'orders:orders' %}" class="btn btn-info float-right">Volver</a>
-        </div>
-
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -169,9 +215,6 @@ Detalle del Pedido
             </div>
         </div>
     </div>
-    <!-- /.card -->
-
 </section>
-
 <!-- /.content -->
 {% endblock content %}

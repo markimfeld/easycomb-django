@@ -44,3 +44,12 @@ class OrderDetail(models.Model):
         elif self.product is None:
             msg = f'Order: {self.order.id} - {self.combo.name} - {self.price_combo} - {self.quantity}'
         return msg
+
+
+class Income(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='incomes')
+    date = models.DateField()
+    amount = models.FloatField()
+
+    def __str__(self):
+        return f'{self.amount}'
