@@ -11,7 +11,8 @@ from django.shortcuts import render, reverse
 # Create your views here.
 from .forms import (
     NewOrderForm,
-    OrderDetailInlineFormSet
+    OrderDetailInlineFormSet,
+    NewIncomeForm
 )
 from clients.models import Customer
 from inventory.models import Product
@@ -22,6 +23,44 @@ from .models import Order
 def get_all_orders(request):
     return render(request, 'orders/orders.html', {
         'orders': Order.objects.filter(status='P').all()
+    })
+
+def register_order_paid(request, pk):
+    order = Order.objects.get(pk=pk)
+
+    order_details = order.get_products.all().annotate(
+        subtotal_combos = ExpressionWrapper(
+            F('price_combo') * F('quantity'), output_field=FloatField()
+        ),
+        subtotal_products = ExpressionWrapper(
+            F('price_product') * F('quantity'), output_field=FloatField()
+        )
+    )
+
+    total_combo = order_details.aggregate(Sum('subtotal_combos'))['subtotal_combos__sum']
+    total_products = order_details.aggregate(Sum('subtotal_products'))['subtotal_products__sum']
+    incomes_sum = order.incomes.all().aggregate(Sum('amount'))['amount__sum']
+    if order.incomes.all().aggregate(Sum('amount'))['amount__sum'] is None:
+        incomes_sum = 0.0
+
+    if request.method == 'POST':
+        form = NewIncomeForm(request.POST)
+
+        if form.is_valid():
+            new_income = form.save(commit=False)
+            if new_income.amount > 0 and ((new_income.amount + incomes_sum) <= total_combo or (new_income.amount + incomes_sum) <= total_products):
+                new_income.order = order
+                new_income.save()
+                return HttpResponseRedirect(reverse('orders:order_details', args=(pk,)))
+            else:
+                if new_income.amount == 0:
+                    print('El monto tiene que ser mayor que cero')
+                else:
+                    print('El monto ingresado es mayor al total!')
+
+    return render(request, 'orders/order-register-paid.html', {
+        'order': order,
+        'form': NewIncomeForm()
     })
 
 def get_order_details(request, pk):
@@ -43,6 +82,14 @@ def get_order_details(request, pk):
 
     total_combo = order_details.aggregate(Sum('subtotal_combos'))
     total_products = order_details.aggregate(Sum('subtotal_products'))
+
+    incomes_sum = order.incomes.all().aggregate(Sum('amount'))
+
+
+    if not order.paid_status:
+        if total_combo['subtotal_combos__sum'] == incomes_sum['amount__sum'] or total_products['subtotal_products__sum'] == incomes_sum['amount__sum']:
+            order.paid_status = True
+            order.save()
 
     return render(request, 'orders/order-details.html', {
         'combos_total': total_combo['subtotal_combos__sum'],

@@ -1,0 +1,72 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% load static %}
+
+
+{% block header-resource %}
+<!-- Tempusdominus Bbootstrap 4 -->
+<link rel="stylesheet"
+    href="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+{% endblock header-resource %}
+
+{% block section-title %}
+Registrar Nuevo Pago
+{% endblock section-title %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <!-- general form elements -->
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Nuevo Pago</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form action="" method="post" role="form">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="{{ form.supplier.name }}">Monto</label>
+                    {{ form.amount }}
+                </div>
+                <!-- Date -->
+                <div class="form-group">
+                    <label>Date:</label>
+                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                        {{ form.date }}
+                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <a href="{% url 'orders:order_details' order.id %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right">Registrar Nuevo Pago</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+<!-- /.content -->
+{% endblock content %}
+
+{% block page-script %}
+<!-- moment -->
+<script src="{% static 'easycomb_theme/plugins/moment/moment.min.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script
+    src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+<!-- Page script -->
+<script type="text/javascript">
+    $(function () {
+        //Date range picker
+        $('#reservationdate').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+</script>
+{% endblock page-script %}

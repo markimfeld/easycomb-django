@@ -3,7 +3,28 @@ from django import forms
 # --------------
 from clients.models import Customer
 from inventory.models import Combo
-from .models import Order, OrderDetail
+from .models import Order, OrderDetail, Income
+
+
+class NewIncomeForm(forms.ModelForm):
+    class Meta:
+        model = Income
+        fields = '__all__'
+        exclude = ('order',)
+        widgets = {
+            'date': forms.DateInput(
+                attrs = {
+                    'class': 'form-control datetimepicker-input',
+                    'data-target': '#reservationdate'
+                }
+            ),
+            'amount': forms.NumberInput(
+                attrs = {
+                    'class': 'form-control'
+                }
+            )
+        }
+
 
 class NewOrderForm(forms.ModelForm):
     class Meta:
