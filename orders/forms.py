@@ -5,6 +5,9 @@ from inventory.models import Combo
 from .models import Order, OrderDetail
 
 
+class MoneyReceivedForm(forms.Form):
+    money_received = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}))
+
 class NewOrderForm(forms.ModelForm):
     class Meta:
         model = Order

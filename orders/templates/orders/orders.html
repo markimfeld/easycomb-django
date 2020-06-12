@@ -65,7 +65,7 @@ Pedidos
                             <span class="badge badge-warning">{{ order.get_status_display }}</span>
                         </td>
                         <td class="text-center">
-                            {% if order.status_paid %}
+                            {% if order.paid_status %}
                                 <span class="badge badge-success">Pagado</span>
                             {% else %}
                                 <span class="badge badge-danger">Pendiente</span>
