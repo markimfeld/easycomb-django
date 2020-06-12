@@ -1,7 +1,9 @@
 from django import forms
 
 # --------------
+from inventory.models import Combo
 from .models import Order, OrderDetail
+
 
 class NewOrderForm(forms.ModelForm):
     class Meta:
@@ -43,6 +45,10 @@ class NewOrderDetailForm(forms.ModelForm):
                 }
             )   
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(NewOrderDetailForm, self).__init__(*args, **kwargs)
+        self.fields['combo'].queryset = Combo.objects.filter(status=True)
 
 OrderDetailInlineFormSet = forms.inlineformset_factory(
     Order,
