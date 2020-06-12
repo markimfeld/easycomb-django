@@ -10,6 +10,13 @@ def get_all_clients(request):
         'customers': Customer.objects.all()
     })
 
+def get_customer_details(request, pk):
+    customer = Customer.objects.get(pk=pk)
+    return render(request, 'clients/customer-details.html', {
+        'customer': customer,
+        'orders': customer.orders.all()
+    })
+
 def add_new_customer(request):
     if request.method == 'POST':
         form = NewCustomerForm(request.POST)

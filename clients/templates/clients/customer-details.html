@@ -1,7 +1,7 @@
 {% extends 'easycomb_theme/layout.html' %}
 
 {% block section-title %}
-Detalle del Pedido
+Detalle del Cliente
 {% endblock section-title %}
 
 {% block content %}
@@ -9,7 +9,7 @@ Detalle del Pedido
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 col-lg-6">
+            <div class="col">
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
@@ -27,17 +27,17 @@ Detalle del Pedido
                         </div>
                         <div class="row">
                             <div class="col d-flex flex-column">
-                                <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="{% url 'clients:customer_details' order.customer.id %}"><span
-                                            class="text-bold h2 text-info">{{ order.customer.first_name }}
-                                            {{ order.customer.last_name }}</span></a></h3>
+                                <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a href="#"><span
+                                            class="text-bold h2 text-info">{{ customer.first_name.capitalize }}
+                                            {{ customer.last_name.capitalize }}</span></a></h3>
                                 <h4 class="card-title text-muted">
-                                    <span class="underline">Nro de Pedido: {{ order.id }}</span>
+                                    <span class="underline">Cliente ID: {{ customer.id }}</span>
                                 </h4>
                             </div>
-                            <div class="col">
+                            <!-- <div class="col">
                                 <h3 class="card-title float-right"><span class="text-bold h3">Fecha: </span><span
                                         class="text-bold h2">{{ order.date|date:"d-m-Y" }}</span></h3>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -48,85 +48,53 @@ Detalle del Pedido
                                         ID
                                     </th>
                                     <th>
-                                        Item
-                                    </th>
-                                    <th>
-                                        Descripción
+                                        Fecha
                                     </th>
                                     <th class="text-center">
-                                        Precio Unidad
+                                        Estado
                                     </th>
                                     <th class="text-center">
-                                        Cantidad
+                                        Pagado
                                     </th>
                                     <th class="text-center">
-                                        Subtotal
+                                        Accion
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for order_detail in order_details %}
+                                {% for order in orders %}
                                 <tr>
                                     <td>
-                                        {% if order_detail.combo is not None %}
-                                        {{ order_detail.combo.id }}
-                                        {% else %}
-                                        {{ order_detail.product.id }}
-                                        {% endif %}
+                                        {{ order.id }}
                                     </td>
                                     <td>
-                                        {% if order_detail.combo is not None %}
-                                        {{ order_detail.combo.name }}
-                                        {% else %}
-                                        {{ order_detail.product.name }}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {{ order_detail.description }}
+                                        {{ order.date }}
                                     </td>
                                     <td class="text-center">
-                                        {% if order_detail.combo is not None %}
-                                        ${{ order_detail.price_combo }}
+                                        {% if order.status == 'P' %}
+                                        <span class="badge badge-warning">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'R' %}
+                                        <span class="badge badge-dark">{{ order.get_status_display }}</span>
                                         {% else %}
-                                        ${{ order_detail.price_product }}
+                                        <span class="badge badge-success">{{ order.get_status_display }}</span>
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
-                                        {{ order_detail.quantity }}
-                                    </td>
-                                    <td class="text-center">
-                                        {% if order_detail.combo is not None %}
-                                        ${{ order_detail.subtotal_combos }}
+                                        {% if order.paid_status %}
+                                        <span class="badge badge-success">Pagado</span>
                                         {% else %}
-                                        ${{ order_detail.subtotal_products }}
+                                        <span class="badge badge-danger">Pendiente</span>
                                         {% endif %}
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-primary btn-sm" href="{% url 'orders:order_details' order.id %}">
+                                            <i class="fas fa-eye">
+                                            </i>
+            
+                                        </a>
                                     </td>
                                 </tr>
                                 {% endfor %}
-                                <tr class="bg-gray-dark">
-                                    <td style="width: 1%">
-
-                                    </td>
-                                    <td>
-                                        <span class="h5 text-bold">Total</span>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="text-bold h5">{{ quantity_total }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        {% if combos_total > 0 %}
-                                        <span class="text-bold h5">${{ combos_total }}</span>
-                                        {% else %}
-                                        <span class="text-bold h5">${{ products_total }}</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -134,17 +102,17 @@ Detalle del Pedido
 
                     <!-- Button trigger modal -->
                     <div class="card-footer">
-                        <a href="{% url 'orders:orders' %}" class="btn btn-info float-right">Volver</a>
+                        <a href="{% url 'clients:customers' %}" class="btn btn-info float-right">Volver</a>
                     </div>
                 </div>
                 <!-- /.card -->
             </div>
-            <div class="col-md-12 col-lg-6">
+            <!-- <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-header bg-dark">
                         <h3 class="card-title">Entregas del Pedido</h3>
                     </div>
-                    <!-- /.card-header -->
+                    
                     <div class="card-body p-0">
                         <table class="table table-striped">
                             <thead>
@@ -173,14 +141,12 @@ Detalle del Pedido
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
+
                     <div class="card-footer">
                         <button class="btn btn-warning">Registrar Pago</button>
                     </div>
                 </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
+            </div>  -->
 
         </div>
     </div>

@@ -9,7 +9,7 @@ class Order(models.Model):
     
     class Status(models.TextChoices):
         PREPARE = 'P', _('Preparar')
-        ALREADY = 'A', _('Listo')
+        READY = 'R', _('Listo')
         DELIVERED = 'D', _('Entregado')
 
     status = models.CharField(

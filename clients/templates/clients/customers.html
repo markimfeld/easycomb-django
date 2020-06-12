@@ -92,7 +92,7 @@ Clientes
                             {% endif %}
                         </td>
                         <td class="project-actions text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <a class="btn btn-primary btn-sm" href="{% url 'clients:customer_details' customer.id %}">
                                 <i class="fas fa-eye">
                                 </i>
                             </a>

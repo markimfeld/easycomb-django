@@ -1,6 +1,7 @@
 from django import forms
 
 # --------------
+from clients.models import Customer
 from inventory.models import Combo
 from .models import Order, OrderDetail
 
@@ -16,6 +17,10 @@ class NewOrderForm(forms.ModelForm):
                 }
             )
         }
+    
+    def __init__(self, *args, **kwargs):
+        super(NewOrderForm, self).__init__(*args, **kwargs)
+        self.fields['customer'].queryset = Customer.objects.filter(status=True)
 
 class NewOrderDetailForm(forms.ModelForm):
     class Meta:
