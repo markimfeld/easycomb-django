@@ -1,7 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Order, OrderDetail
+from .models import (
+    Order, 
+    OrderDetail,
+    Income
+)
 
 
 class OrderDetailInline(admin.TabularInline):
@@ -15,3 +19,4 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin),
 admin.site.register(OrderDetail)
+admin.site.register(Income)

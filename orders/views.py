@@ -10,10 +10,10 @@ from django.shortcuts import render, reverse
 
 # Create your views here.
 from .forms import (
-    MoneyReceivedForm,
     NewOrderForm,
     OrderDetailInlineFormSet
 )
+from clients.models import Customer
 from inventory.models import Product
 from .models import Order
 
@@ -27,7 +27,7 @@ def get_all_orders(request):
 def get_order_details(request, pk):
     
     order = Order.objects.get(pk=pk)
-
+    incomes = order.incomes.all()
 
     # get order's details and calculate subtotals
     order_details = order.get_products.all().annotate(
@@ -44,30 +44,13 @@ def get_order_details(request, pk):
     total_combo = order_details.aggregate(Sum('subtotal_combos'))
     total_products = order_details.aggregate(Sum('subtotal_products'))
 
-
-    if request.method == 'POST':
-        form = MoneyReceivedForm(request.POST)
-
-        if form.is_valid():
-            money_received = form.cleaned_data['money_received']
-            order.money_received = money_received     
-            if total_combo['subtotal_combos__sum'] > 0:
-                if total_combo['subtotal_combos__sum'] == money_received:
-                    order.paid_status = True
-            order.save()
-            print('se ingreso el dinero')
-            return HttpResponseRedirect(reverse('orders:order_details', args=(pk,)))
-
-    
-    print(order.money_received)
-
     return render(request, 'orders/order-details.html', {
         'combos_total': total_combo['subtotal_combos__sum'],
         'products_total': total_products['subtotal_products__sum'],
         'quantity_total': quantity_sum['quantity__sum'],
         'order': order,
-        'order_details': order_details,
-        'form': MoneyReceivedForm()
+        'incomes': incomes,
+        'order_details': order_details
     })
 
 # open a transaction
