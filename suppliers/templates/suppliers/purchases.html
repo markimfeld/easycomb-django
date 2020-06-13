@@ -28,7 +28,7 @@ Compras
                 <thead>
                     <tr>
                         <th style="width: 1%">
-                            #
+                            ID
                         </th>
                         <th>
                             Proveedor
@@ -45,7 +45,7 @@ Compras
                     {% for purchase in purchases %}
                     <tr>
                         <td>
-                            #
+                            {{ purchase.id }}
                         </td>
                         <td>
                             <a>
@@ -94,6 +94,13 @@ Compras
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
+                    {% empty %}
+                    <tr>
+                        <td></td>
+                        <td>No hay compras realizadas.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
