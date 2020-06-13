@@ -8,7 +8,7 @@ from orders.models import Order
 def index(request):
 
     return render(request, 'easycomb_theme/index.html', {
-        'orders': Order.objects.all(),
+        'orders': Order.objects.filter(status='P').all(),
         'quantity_orders': Order.objects.filter(status='P').all().count,
         'quantity_products': Product.objects.all().count,
         'quantity_combos': Combo.objects.all().count,
