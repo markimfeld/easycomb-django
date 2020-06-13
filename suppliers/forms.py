@@ -59,7 +59,7 @@ class NewPurchaseForm(forms.ModelForm):
                     'data-target': '#reservationdate'
                 }
             ),
-            'remarks': forms.Textarea (
+            'remarks': forms.TextInput (
                 attrs = {
                     'class': 'form-control'
                 }
@@ -79,7 +79,7 @@ class NewPurchaseDetailForm(forms.ModelForm):
                     'class': 'form-control custom-select'
                 }
             ), 
-            'description': forms.Textarea(
+            'description': forms.TextInput(
                 attrs = {
                     'class': 'form-control'
                 }

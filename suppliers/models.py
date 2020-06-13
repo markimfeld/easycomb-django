@@ -20,7 +20,7 @@ class Supplier(models.Model):
 class Purchase(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, default=0)
     date = models.DateField()
-    remarks = models.TextField(blank=True, null=True)
+    remarks = models.CharField(max_length=100, blank=True, null=True)
     products = models.ManyToManyField(Product, through='PurchaseDetail')
 
     def __str__(self):
@@ -30,7 +30,7 @@ class Purchase(models.Model):
 class PurchaseDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='products_purchased')
-    description = models.TextField(blank=True, null=True)
+    description = models.CharField(max_length=100, blank=True, null=True)
     cost = models.FloatField()
     quantity = models.IntegerField()
 

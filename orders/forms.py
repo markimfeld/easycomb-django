@@ -72,7 +72,7 @@ class NewOrderDetailForm(forms.ModelForm):
                     'class': 'form-control custom-select'
                 }
             ),
-            'description': forms.Textarea(
+            'description': forms.TextInput(
                 attrs = {
                     'class': 'form-control'
                 }
