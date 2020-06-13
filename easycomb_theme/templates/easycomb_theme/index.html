@@ -30,7 +30,8 @@ Escritorio
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="{% url 'orders:orders' %}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{% url 'orders:orders' %}" class="small-box-footer">Más info <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -115,7 +116,8 @@ Escritorio
                                 <tbody>
                                     {% for order in orders %}
                                     <tr>
-                                        <td><a href="{% url 'orders:order_details' order.id %}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a></td>
+                                        <td><a href="{% url 'orders:order_details' order.id %}"
+                                                class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a></td>
                                         <td>{{ order.customer.first_name }}</td>
                                         <td>{{ order.date }}</td>
                                         <td>
@@ -128,6 +130,13 @@ Escritorio
                                             {% endif %}
                                         </td>
                                     </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td></td>
+                                        <td>No hay pedidos nuevos.</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -136,8 +145,10 @@ Escritorio
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-                        <a href="{% url 'orders:new_order' %}" class="btn btn-sm btn-info float-left">Crear Nuevo Pedido</a>
-                        <a href="{% url 'orders:orders' %}" class="btn btn-sm btn-secondary float-right">Ver Todos Los Pedidos</a>
+                        <a href="{% url 'orders:new_order' %}" class="btn btn-sm btn-info float-left">Crear Nuevo
+                            Pedido</a>
+                        <a href="{% url 'orders:orders' %}" class="btn btn-sm btn-secondary float-right">Ver Todos Los
+                            Pedidos</a>
                     </div>
                     <!-- /.card-footer -->
                 </div>
