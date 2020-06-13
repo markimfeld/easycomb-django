@@ -121,12 +121,12 @@ Escritorio
                                         <td>{{ order.customer.first_name }}</td>
                                         <td>{{ order.date }}</td>
                                         <td>
-                                            {% if order.status == 'P' %}
-                                            <span class="badge badge-warning">{{ order.get_status_display }}</span>
-                                            {% elif order.status == 'R' %}
-                                            <span class="badge badge-dark">{{ order.get_status_display }}</span>
+                                            {% if order.status.id == 1 %}
+                                            <span class="badge badge-warning">{{ order.status.name }}</span>
+                                            {% elif order.status.id == 2 %}
+                                            <span class="badge badge-dark">{{ order.status.name }}</span>
                                             {% else %}
-                                            <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                            <span class="badge badge-primary">{{ order.status.name }}</span>
                                             {% endif %}
                                         </td>
                                     </tr>

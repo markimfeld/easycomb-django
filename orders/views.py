@@ -17,14 +17,12 @@ from .forms import (
 )
 from clients.models import Customer
 from inventory.models import Product
-from .choices import Status
-from .models import Order
+from .models import Order, Status
 
 
 def is_valid_query(params):
     return params is not None and params != ''
-
-
+    
 def calculate_subtotals(order):
     order_details = order.get_products.all().annotate(
         subtotal_combos = ExpressionWrapper(
@@ -40,20 +38,22 @@ def get_all_orders(request):
     
     customers = Customer.objects.filter(status=True).all()
 
+    status = Status.objects.all()
+
     customer_id = request.GET.get('customer')
 
-    status = request.GET.get('status')
+    status_id = request.GET.get('status')
 
     orders = Order.objects.all()
 
-    if is_valid_query(customer_id) and int(customer_id) >= 0:
+    if is_valid_query(customer_id) and int(customer_id) > 0:
         orders = orders.filter(customer=customers.get(pk=customer_id)).all()
 
-    if is_valid_query(status):
-        orders = orders.filter(status=status)
+    if is_valid_query(status_id) and int(status_id) > 0:
+        orders = orders.filter(status=status.get(pk=status_id))
 
     return render(request, 'orders/orders.html', {
-        'status_choices': Status.choices,
+        'status_choices': status,
         'customers': customers,
         'orders': orders
     })
@@ -124,9 +124,12 @@ def get_order_details(request, pk):
 def add_new_order(request):
     if request.method == 'POST':
         form = NewOrderForm(request.POST)
+
         if form.is_valid():
             sid = transaction.savepoint()
-            new_order = form.save()
+            new_order = form.save(commit=False)
+            new_order.status = Status.objects.first()
+            new_order.save()
             # transaction now contains new_order.save()
             formset = OrderDetailInlineFormSet(request.POST, instance=new_order)
             
@@ -168,18 +171,15 @@ def change_status_order(request, pk):
     if request.method == 'POST':
         form = ChangeStatusOrderForm(request.POST)
 
-        print(form.is_valid())
-
         if form.is_valid():
             new_status = form.cleaned_data['status']
-            # print(new_status)
             order.status = new_status
             order.save()
             return HttpResponseRedirect(reverse('orders:orders'))
 
     return render(request, 'orders/order-edit-status.html', {
         'order': order,
-        'form': ChangeStatusOrderForm(initial={'status': order.status })
+        'form': ChangeStatusOrderForm(initial = {'status': order.status })
     })
 
 def delete_order(request, pk):

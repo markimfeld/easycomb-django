@@ -4,20 +4,17 @@ from django.utils.translation import gettext_lazy as _
 from clients.models import Customer
 from inventory.models import Combo, Product
 
+class Status(models.Model):
+    name = models.CharField(max_length=64)
+
+    class Meta:
+        verbose_name_plural = "Status"
+
+    def __str__(self):
+        return f'{self.name}'
 
 class Order(models.Model):
-    
-    class Status(models.TextChoices):
-        PREPARE = 'P', _('Preparar')
-        READY = 'R', _('Listo')
-        DELIVERED = 'D', _('Entregado')
-
-    status = models.CharField(
-        max_length=1,
-        choices=Status.choices,
-        default=Status.PREPARE,
-    )
-    
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     paid_status = models.BooleanField(default=False)
     money_received = models.FloatField(default=0)

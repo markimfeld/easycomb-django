@@ -4,7 +4,8 @@ from django.contrib import admin
 from .models import (
     Order, 
     OrderDetail,
-    Income
+    Income,
+    Status
 )
 
 
@@ -17,6 +18,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderDetailInline,
     ]
 
-admin.site.register(Order, OrderAdmin),
+admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderDetail)
 admin.site.register(Income)
+admin.site.register(Status)

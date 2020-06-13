@@ -2,22 +2,22 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 # --------------
-from .choices import Status
 from clients.models import Customer
 from inventory.models import Combo
-from .models import Order, OrderDetail, Income
+from .models import Order, OrderDetail, Income, Status
 
 
-class ChangeStatusOrderForm(forms.Form):
-    status = forms.ChoiceField(
-        choices = Status.choices, 
-        initial = Status.PREPARE, 
-        widget=forms.Select( 
-            attrs = {
-                'class': 'custom-select'
-            }
-        )
-    )
+class ChangeStatusOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('status',)
+        widgets = {
+            'status': forms.Select(
+                attrs = {
+                    'class': 'form-control custom-select'
+                }
+            )
+        }
 
 class NewIncomeForm(forms.ModelForm):
     class Meta:

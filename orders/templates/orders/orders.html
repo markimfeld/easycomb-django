@@ -24,7 +24,7 @@ Pedidos
                 <div class="form-group mr-2">
                     <label class="col-form-label mr-1" for="customer">Filtrar por cliente:</label>
                     <select class="form-control select2bs4" name="customer">
-                        <option value="-1" selected="selected">Elige un cliente..</option>
+                        <option value="0" selected="selected">Elige un cliente..</option>
                         {% for customer in customers %}
                         <option value="{{ customer.id }}">{{ customer.first_name }}</option>
                         {% endfor %}
@@ -33,10 +33,10 @@ Pedidos
                 <div class="form-group mr-2">
                     <label class="col-form-label mr-1" for="customer">Filtrar por estado:</label>
                     <select class="form-control select2bs4" name="status">
-                        <option value="" selected>Elige un estado..</option>
-                        <option value="P" >Preparar</option>
-                        <option value="R">Listo</option>
-                        <option value="D">Entregado</option>
+                        <option value="0" selected>Elige un estado..</option>
+                        {% for status_choice in status_choices %}
+                        <option value="{{ status_choice.id }}">{{ status_choice.name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <button type="submit" class="btn btn-secondary">Filtrar</button>
@@ -47,7 +47,7 @@ Pedidos
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Pedidos Para Preparar</h3>
+            <h3 class="card-title">Pedidos</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
@@ -97,12 +97,12 @@ Pedidos
                         </td>
                         <td class="project-state">
                             <a href="{% url 'orders:change_status_order' order.id %}">
-                                {% if order.status == 'P' %}
-                                    <span class="badge badge-warning">{{ order.get_status_display }}</span>
-                                {% elif order.status == 'R' %}
-                                    <span class="badge badge-dark">{{ order.get_status_display }}</span>
+                                {% if order.status.id == 1 %}
+                                    <span class="badge badge-warning">{{ order.status.name }}</span>
+                                {% elif order.status.id == 2 %}
+                                    <span class="badge badge-dark">{{ order.status.name }}</span>
                                 {% else %}
-                                    <span class="badge badge-primary">{{ order.get_status_display }}</span>
+                                    <span class="badge badge-primary">{{ order.status.name }}</span>
                                 {% endif %}
                             </a>
                         </td>
