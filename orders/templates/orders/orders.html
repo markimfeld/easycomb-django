@@ -113,6 +113,14 @@ Pedidos
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
+                    {% empty %}
+                    <tr>
+                        <td></td>
+                        <td>No hay pedidos nuevos.</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -232,6 +240,14 @@ Pedidos
                                     </div>
                                     <!-- /.modal-dialog -->
                                 </div>
+                                {% empty %}
+                                <tr>
+                                    <td></td>
+                                    <td>No hay pedidos listos.</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -349,6 +365,14 @@ Pedidos
                                     </div>
                                     <!-- /.modal-dialog -->
                                 </div>
+                                {% empty %}
+                                <tr>
+                                    <td></td>
+                                    <td>No hay pedidos entregados.</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
