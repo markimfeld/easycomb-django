@@ -21,6 +21,9 @@ from .choices import Status
 from .models import Order
 
 
+def is_valid_query(params):
+    return params is not None and params != ''
+
 
 def calculate_subtotals(order):
     order_details = order.get_products.all().annotate(
@@ -34,12 +37,25 @@ def calculate_subtotals(order):
     return order_details
 
 def get_all_orders(request):
+    
+    customers = Customer.objects.filter(status=True).all()
+
+    customer_id = request.GET.get('customer')
+
+    status = request.GET.get('status')
+
+    orders = Order.objects.all()
+
+    if is_valid_query(customer_id) and int(customer_id) >= 0:
+        orders = orders.filter(customer=customers.get(pk=customer_id)).all()
+
+    if is_valid_query(status):
+        orders = orders.filter(status=status)
+
     return render(request, 'orders/orders.html', {
         'status_choices': Status.choices,
-        'customers': Customer.objects.filter(status=True).all(),
-        'orders_to_prepare': Order.objects.filter(status='P').all(),
-        'orders_ready': Order.objects.filter(status='R').all(),
-        'orders_delivered': Order.objects.filter(status='D').all()
+        'customers': customers,
+        'orders': orders
     })
 
 def register_order_paid(request, pk):
