@@ -42,42 +42,43 @@ Nuevo Pedido
                     </div>
                 </div>
                 <div class="row">
-                    {% for form in formset %}
-                    {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                    {% endfor %}
-                    <div class="col col-md-6 col-lg-4">
+                    <div class="col">
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Item</h3>
-
+                                <h3 class="card-title">Agregar Item</h3>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"
                                         data-toggle="tooltip" title="Collapse">
                                         <i class="fas fa-minus"></i></button>
                                 </div>
                             </div>
+                            {% for form in formset %}
+                            {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                            {% endfor %}
                             <div class="card-body">
-                                <div class="form-group combos">
-                                    <label for="{{ form.combo.name }}">Combo</label>
-                                    {{ form.combo }}
-                                </div>
-                                <div class="form-group products">
-                                    <label for="{{ form.product.name }}">Producto</label>
-                                    {{ form.product }}
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{ form.description.name }}">Descripción</label>
-                                    {{ form.description }}
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{ form.quantity.name }}">Cantidad</label>
-                                    {{ form.quantity }}
+                                <div class="row">
+                                    <div class="form-group combos col-3">
+                                        <label for="{{ form.combo.name }}">Combo</label>
+                                        {{ form.combo }}
+                                    </div>
+                                    <div class="form-group products col-3">
+                                        <label for="{{ form.product.name }}">Producto</label>
+                                        {{ form.product }}
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="{{ form.description.name }}">Descripción</label>
+                                        {{ form.description }}
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label for="{{ form.quantity.name }}">Cantidad</label>
+                                        {{ form.quantity }}
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
 
@@ -104,7 +105,7 @@ Nuevo Pedido
 
 <script>
     $(document).ready((id) => {
-        
+
         //Initialize Select2 Elements
         $('.select2').select2()
 
