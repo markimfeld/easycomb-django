@@ -13,7 +13,7 @@ Pedidos
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Pedidos</h3>
+            <h3 class="card-title">Pedidos Para Preparar</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                     title="Collapse">
@@ -48,7 +48,7 @@ Pedidos
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in orders %}
+                    {% for order in orders_to_prepare %}
                     <tr>
                         <!-- <td>
                             {{ order.id }}
@@ -66,9 +66,9 @@ Pedidos
                         </td>
                         <td class="text-center">
                             {% if order.paid_status %}
-                                <span class="badge badge-success">Pagado</span>
+                            <span class="badge badge-success">Pagado</span>
                             {% else %}
-                                <span class="badge badge-danger">Pendiente</span>
+                            <span class="badge badge-danger">Pendiente</span>
                             {% endif %}
                         </td>
                         <td class="project-actions text-center">
@@ -82,7 +82,8 @@ Pedidos
                                 </i>
 
                             </a>
-                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#modal-default{{ order.id }}">
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
+                                data-target="#modal-default{{ order.id }}">
                                 <i class="fas fa-trash">
                                 </i>
 
@@ -100,7 +101,8 @@ Pedidos
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p class="h6">Estas seguro de borrar el pedido con ID <strong>{{ order.id }}</strong>?</p>
+                                    <p class="h6">Estas seguro de borrar el pedido con ID
+                                        <strong>{{ order.id }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -118,6 +120,245 @@ Pedidos
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pedidos Listos</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                                title="Remove">
+                                <i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <!-- <th style="width: 1%">
+                                #
+                            </th> -->
+                                    <th>
+                                        Cliente
+                                    </th>
+                                    <th>
+                                        Fecha
+                                    </th>
+                                    <th class="text-center">
+                                        Estado
+                                    </th>
+                                    <th class="text-center">
+                                        Pagado
+                                    </th>
+                                    <th style="width: 20%" class="text-center">
+                                        Accion
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders_ready %}
+                                <tr>
+                                    <!-- <td>
+                                {{ order.id }}
+                            </td> -->
+                                    <td>
+                                        <a href="{% url 'clients:customer_details' order.customer.id %}">
+                                            {{ order.customer.first_name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ order.date|date:"d F, Y" }}
+                                    </td>
+                                    <td class="project-state">
+                                        <span class="badge badge-dark">{{ order.get_status_display }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if order.paid_status %}
+                                        <span class="badge badge-success">Pagado</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">Pendiente</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'orders:order_details' order.id %}">
+                                            <i class="fas fa-eye">
+                                            </i>
+
+                                        </a>
+                                        <a class="btn btn-info btn-sm" href="#">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+
+                                        </a>
+                                        <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
+                                            data-target="#modal-default{{ order.id }}">
+                                            <i class="fas fa-trash">
+                                            </i>
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Modal to Delete combo -->
+                                <div class="modal fade" id="modal-default{{ order.id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Borrar Pedido</h3>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="h6">Estas seguro de borrar el pedido con ID
+                                                    <strong>{{ order.id }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Cancelar</button>
+                                                <a href="{% url 'orders:delete_order' order.id %}"
+                                                    class="btn btn-danger">Borrar</a>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+            <div class="col-md-12 col-lg-6">
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pedidos Entregados</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                                title="Collapse">
+                                <i class="fas fa-minus"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                                title="Remove">
+                                <i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <!-- <th style="width: 1%">
+                                #
+                            </th> -->
+                                    <th>
+                                        Cliente
+                                    </th>
+                                    <th>
+                                        Fecha
+                                    </th>
+                                    <th class="text-center">
+                                        Estado
+                                    </th>
+                                    <th class="text-center">
+                                        Pagado
+                                    </th>
+                                    <th style="width: 20%" class="text-center">
+                                        Accion
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders_delivered %}
+                                <tr>
+                                    <!-- <td>
+                                {{ order.id }}
+                            </td> -->
+                                    <td>
+                                        <a href="{% url 'clients:customer_details' order.customer.id %}">
+                                            {{ order.customer.first_name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ order.date|date:"d F, Y" }}
+                                    </td>
+                                    <td class="project-state">
+                                        <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if order.paid_status %}
+                                        <span class="badge badge-success">Pagado</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">Pendiente</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'orders:order_details' order.id %}">
+                                            <i class="fas fa-eye">
+                                            </i>
+
+                                        </a>
+                                        <a class="btn btn-info btn-sm" href="#">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+
+                                        </a>
+                                        <a class="btn btn-danger btn-sm" href="#" data-toggle="modal"
+                                            data-target="#modal-default{{ order.id }}">
+                                            <i class="fas fa-trash">
+                                            </i>
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Modal to Delete combo -->
+                                <div class="modal fade" id="modal-default{{ order.id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Borrar Pedido</h3>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="h6">Estas seguro de borrar el pedido con ID
+                                                    <strong>{{ order.id }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Cancelar</button>
+                                                <a href="{% url 'orders:delete_order' order.id %}"
+                                                    class="btn btn-danger">Borrar</a>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
 
 </section>
 

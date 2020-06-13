@@ -22,7 +22,9 @@ from .models import Order
 
 def get_all_orders(request):
     return render(request, 'orders/orders.html', {
-        'orders': Order.objects.filter(status='P').all()
+        'orders_to_prepare': Order.objects.filter(status='P').all(),
+        'orders_ready': Order.objects.filter(status='R').all(),
+        'orders_delivered': Order.objects.filter(status='D').all()
     })
 
 def register_order_paid(request, pk):
