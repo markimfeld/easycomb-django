@@ -94,6 +94,14 @@ Detalle del Cliente
                                         </a>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                <tr>
+                                    <td></td>
+                                    <td>No hay pedidos.</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
