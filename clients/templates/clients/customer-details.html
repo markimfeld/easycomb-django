@@ -87,10 +87,11 @@ Detalle del Cliente
                                         {% endif %}
                                     </td>
                                     <td class="project-actions text-center">
-                                        <a class="btn btn-primary btn-sm" href="{% url 'orders:order_details' order.id %}">
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'orders:order_details' order.id %}">
                                             <i class="fas fa-eye">
                                             </i>
-            
+
                                         </a>
                                     </td>
                                 </tr>
@@ -115,46 +116,27 @@ Detalle del Cliente
                 </div>
                 <!-- /.card -->
             </div>
-            <!-- <div class="col-md-12 col-lg-6">
-                <div class="card">
-                    <div class="card-header bg-dark">
-                        <h3 class="card-title">Entregas del Pedido</h3>
-                    </div>
-                    
-                    <div class="card-body p-0">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width: 10px">ID</th>
-                                    <th>Fecha</th>
-                                    <th>Monto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for income in incomes %}
-                                <tr>
-                                    <td>{{ income.id }}</td>
-                                    <td>{{ income.date }}</td>
-                                    <td>
-                                        <span class="badge bg-success">{{ income.amount }}</span>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td></td>
-                                    <td>No hay entregas realizadas.</td>
-                                    <td></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <div class="card-footer">
-                        <button class="btn btn-warning">Registrar Pago</button>
+            <div class="col-md-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">Monto por cobrar</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                    class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
                     </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <h3><span class="text-bold">Total:</span> ${{ total_to_paid }}</h3>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
-            </div>  -->
+
+            </div>
 
         </div>
     </div>
