@@ -28,6 +28,7 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.id} - {self.customer.first_name}'
 
+
 class OrderDetail(models.Model):
     combo = models.ForeignKey(Combo, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)

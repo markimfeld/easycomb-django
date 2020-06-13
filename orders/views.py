@@ -12,11 +12,14 @@ from django.shortcuts import render, reverse
 from .forms import (
     NewOrderForm,
     OrderDetailInlineFormSet,
-    NewIncomeForm
+    NewIncomeForm,
+    ChangeStatusOrderForm,
 )
 from clients.models import Customer
 from inventory.models import Product
+from .choices import Status
 from .models import Order
+
 
 
 def calculate_subtotals(order):
@@ -32,6 +35,8 @@ def calculate_subtotals(order):
 
 def get_all_orders(request):
     return render(request, 'orders/orders.html', {
+        'status_choices': Status.choices,
+        'customers': Customer.objects.filter(status=True).all(),
         'orders_to_prepare': Order.objects.filter(status='P').all(),
         'orders_ready': Order.objects.filter(status='R').all(),
         'orders_delivered': Order.objects.filter(status='D').all()
@@ -139,6 +144,26 @@ def add_new_order(request):
     return render(request, 'orders/order-add.html', {
         'form': NewOrderForm(),
         'formset': OrderDetailInlineFormSet()
+    })
+
+def change_status_order(request, pk):
+    order = Order.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = ChangeStatusOrderForm(request.POST)
+
+        print(form.is_valid())
+
+        if form.is_valid():
+            new_status = form.cleaned_data['status']
+            # print(new_status)
+            order.status = new_status
+            order.save()
+            return HttpResponseRedirect(reverse('orders:orders'))
+
+    return render(request, 'orders/order-edit-status.html', {
+        'order': order,
+        'form': ChangeStatusOrderForm(initial={'status': order.status })
     })
 
 def delete_order(request, pk):

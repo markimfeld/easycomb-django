@@ -1,5 +1,13 @@
 {% extends 'easycomb_theme/layout.html' %}
 
+{% load static %}
+
+{% block header-resource %}
+<!-- Select2 -->
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/select2/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+{% endblock header-resource %}
+
 {% block section-title %}
 Pedidos
 <a class="btn btn-success btn-sm" href="{% url 'orders:new_order' %}"><i class="fas fa-plus-circle">
@@ -9,6 +17,23 @@ Pedidos
 {% block content %}
 <!-- Main content -->
 <section class="content">
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form action="" method="get" class="form-inline">
+                <div class="form-group mr-2">
+                    <label class="col-form-label mr-1">Filtrar por cliente:</label>
+                    <select class="form-control select2bs4">
+                        <option selected="selected">Elige un cliente..</option>
+                        {% for customer in customers %}
+                        <option value="{{ customer.id }}">{{ customer.first_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-secondary">Filtrar</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Default box -->
     <div class="card">
@@ -62,7 +87,9 @@ Pedidos
                             {{ order.date|date:"d F, Y" }}
                         </td>
                         <td class="project-state">
-                            <span class="badge badge-warning">{{ order.get_status_display }}</span>
+                            <a href="{% url 'orders:change_status_order' order.id %}">
+                                <span class="badge badge-warning">{{ order.get_status_display }}</span>
+                            </a>
                         </td>
                         <td class="text-center">
                             {% if order.paid_status %}
@@ -74,11 +101,6 @@ Pedidos
                         <td class="project-actions text-center">
                             <a class="btn btn-primary btn-sm" href="{% url 'orders:order_details' order.id %}">
                                 <i class="fas fa-eye">
-                                </i>
-
-                            </a>
-                            <a class="btn btn-info btn-sm" href="#">
-                                <i class="fas fa-pencil-alt">
                                 </i>
 
                             </a>
@@ -185,7 +207,9 @@ Pedidos
                                         {{ order.date|date:"d F, Y" }}
                                     </td>
                                     <td class="project-state">
-                                        <span class="badge badge-dark">{{ order.get_status_display }}</span>
+                                        <a href="{% url 'orders:change_status_order' order.id %}">
+                                            <span class="badge badge-dark">{{ order.get_status_display }}</span>
+                                        </a>
                                     </td>
                                     <td class="text-center">
                                         {% if order.paid_status %}
@@ -198,11 +222,6 @@ Pedidos
                                         <a class="btn btn-primary btn-sm"
                                             href="{% url 'orders:order_details' order.id %}">
                                             <i class="fas fa-eye">
-                                            </i>
-
-                                        </a>
-                                        <a class="btn btn-info btn-sm" href="#">
-                                            <i class="fas fa-pencil-alt">
                                             </i>
 
                                         </a>
@@ -310,7 +329,9 @@ Pedidos
                                         {{ order.date|date:"d F, Y" }}
                                     </td>
                                     <td class="project-state">
-                                        <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                        <a href="{% url 'orders:change_status_order' order.id %}">
+                                            <span class="badge badge-success">{{ order.get_status_display }}</span>
+                                        </a>
                                     </td>
                                     <td class="text-center">
                                         {% if order.paid_status %}
@@ -323,11 +344,6 @@ Pedidos
                                         <a class="btn btn-primary btn-sm"
                                             href="{% url 'orders:order_details' order.id %}">
                                             <i class="fas fa-eye">
-                                            </i>
-
-                                        </a>
-                                        <a class="btn btn-info btn-sm" href="#">
-                                            <i class="fas fa-pencil-alt">
                                             </i>
 
                                         </a>
@@ -388,3 +404,24 @@ Pedidos
 
 <!-- /.content -->
 {% endblock content %}
+
+
+{% block page-script %}
+
+<!-- Select2 -->
+<script src="{% static 'easycomb_theme/plugins/select2/js/select2.full.min.js' %}"></script>
+
+
+<script>
+    $(document).ready((id) => {
+
+        //Initialize Select2 Elements
+        $('.select2').select2();
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+    })
+</script>
+{% endblock page-script %}

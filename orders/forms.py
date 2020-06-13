@@ -1,10 +1,23 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 # --------------
+from .choices import Status
 from clients.models import Customer
 from inventory.models import Combo
 from .models import Order, OrderDetail, Income
 
+
+class ChangeStatusOrderForm(forms.Form):
+    status = forms.ChoiceField(
+        choices = Status.choices, 
+        initial = Status.PREPARE, 
+        widget=forms.Select( 
+            attrs = {
+                'class': 'custom-select'
+            }
+        )
+    )
 
 class NewIncomeForm(forms.ModelForm):
     class Meta:
