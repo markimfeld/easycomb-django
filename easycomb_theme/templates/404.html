@@ -1,0 +1,22 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="error-page">
+            <h2 class="headline text-warning"> 404</h2>
+
+            <div class="error-content">
+                <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Página no encontrada.</h3>
+
+                <p>
+                    No pudimos encontrar la página que está buscando.
+                    Mientras tanto, deberías <a href="{% url 'easycomb_theme:index' %}">regresar al escritorio</a>.
+                </p>
+            </div>
+            <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+    </section>
+    <!-- /.content -->
+{% endblock content %}
