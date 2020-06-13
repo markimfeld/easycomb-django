@@ -145,6 +145,13 @@ def delete_order(request, pk):
     order = Order.objects.get(pk=pk)
 
     if order is not None:
+        for order_item in order.get_products.all():
+            if order_item.combo is not None:
+                for combo_item in order_item.combo.products.all():
+                    Product.objects.filter(id=combo_item.product.id).update(stock=F('stock') + (order_item.quantity * combo_item.quantity))
+            else:
+                Product.objects.filter(id=order_item.product.id).update(stock=F('stock') + order_item.quantity)
+        
         order.delete()
 
         return HttpResponseRedirect(reverse('orders:orders'))
