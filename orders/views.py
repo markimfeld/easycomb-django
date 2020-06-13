@@ -19,6 +19,16 @@ from inventory.models import Product
 from .models import Order
 
 
+def calculate_subtotals(order):
+    order_details = order.get_products.all().annotate(
+        subtotal_combos = ExpressionWrapper(
+            F('price_combo') * F('quantity'), output_field=FloatField()
+        ),
+        subtotal_products = ExpressionWrapper(
+            F('price_product') * F('quantity'), output_field=FloatField()
+        )
+    )
+    return order_details
 
 def get_all_orders(request):
     return render(request, 'orders/orders.html', {
@@ -30,14 +40,7 @@ def get_all_orders(request):
 def register_order_paid(request, pk):
     order = Order.objects.get(pk=pk)
 
-    order_details = order.get_products.all().annotate(
-        subtotal_combos = ExpressionWrapper(
-            F('price_combo') * F('quantity'), output_field=FloatField()
-        ),
-        subtotal_products = ExpressionWrapper(
-            F('price_product') * F('quantity'), output_field=FloatField()
-        )
-    )
+    order_details = calculate_subtotals(order)
 
     total_combo = order_details.aggregate(Sum('subtotal_combos'))['subtotal_combos__sum']
     total_products = order_details.aggregate(Sum('subtotal_products'))['subtotal_products__sum']
@@ -71,14 +74,7 @@ def get_order_details(request, pk):
     incomes = order.incomes.all()
 
     # get order's details and calculate subtotals
-    order_details = order.get_products.all().annotate(
-        subtotal_combos = ExpressionWrapper(
-            F('price_combo') * F('quantity'), output_field=FloatField()
-        ),
-        subtotal_products = ExpressionWrapper(
-            F('price_product') * F('quantity'), output_field=FloatField()
-        )
-    )
+    order_details = calculate_subtotals(order)
 
     quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
 
