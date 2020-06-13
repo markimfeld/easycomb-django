@@ -27,9 +27,9 @@ Pedidos
             <table class="table table-striped projects">
                 <thead>
                     <tr>
-                        <th style="width: 1%">
+                        <!-- <th style="width: 1%">
                             #
-                        </th>
+                        </th> -->
                         <th>
                             Cliente
                         </th>
@@ -50,11 +50,11 @@ Pedidos
                 <tbody>
                     {% for order in orders %}
                     <tr>
-                        <td>
+                        <!-- <td>
                             {{ order.id }}
-                        </td>
+                        </td> -->
                         <td>
-                            <a>
+                            <a href="{% url 'clients:customer_details' order.customer.id %}">
                                 {{ order.customer.first_name }}
                             </a>
                         </td>
