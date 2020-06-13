@@ -26,69 +26,76 @@ Nueva Compra
         <form action="{% url 'suppliers:new_purchase' %}" method="post" role="form">
             {% csrf_token %}
             <div class="card-body">
-                <div class="form-group">
-                    <label for="{{ form.supplier.name }}">Proveedor</label>
-                    {{ form.supplier }}
-                </div>
-                <!-- Date -->
-                <div class="form-group">
-                    <label>Date:</label>
-                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                        {{ form.date }}
-                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                <div class="row">
+                    <div class="form-group col">
+                        <label for="{{ form.supplier.name }}">Proveedor</label>
+                        {{ form.supplier }}
+                    </div>
+                    <!-- Date -->
+                    <div class="form-group col">
+                        <label>Date:</label>
+                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            {{ form.date }}
+                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.remarks.name }}">Descripcion</label>
-                    {{ form.remarks }}
+                    <div class="form-group col-6">
+                        <label for="{{ form.remarks.name }}">Descripcion</label>
+                        {{ form.remarks }}
+                    </div>
                 </div>
 
                 <div class="row">
-                    {% for form in formset %}
-                    <div class="col col-md-6 col-lg-4">
+                    <div class="col">
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Producto</h3>
-
+                                <h3 class="card-title">Agregar Producto</h3>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"
                                         data-toggle="tooltip" title="Collapse">
                                         <i class="fas fa-minus"></i></button>
                                 </div>
                             </div>
+                            {% for form in formset %}
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label for="{{ form.product.name }}">Producto</label>
-                                    {{ form.product }}
-                                </div>
-                                <div class="form-group">
-                                    <label for="{{ form.description.name }}">Descripcion</label>
-                                    {{ form.description }}
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="{{ form.cost.name }}">Costo por unidad</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">$</span>
+                                <div class="card">
+                                    <div class="card-header bg-info">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-12 col-lg-3">
+                                                <label for="{{ form.product.name }}">Producto</label>
+                                                {{ form.product }}
                                             </div>
-                                            {{ form.cost }}
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">.00</span>
+                                            <div class="form-group col-12 col-lg-3">
+                                                <label for="{{ form.description.name }}">Descripcion</label>
+                                                {{ form.description }}
+                                            </div>
+                                            <div class="form-group col-12 col-lg-3">
+                                                <label for="{{ form.cost.name }}">Costo por unidad</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">$</span>
+                                                    </div>
+                                                    {{ form.cost }}
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-12 col-lg-3">
+                                                <label for="{{ form.cost.name }}">Cantidad</label>
+                                                {{ form.quantity }}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <label for="{{ form.cost.name }}">Cantidad</label>
-                                        {{ form.quantity }}
-                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
 
