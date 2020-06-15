@@ -23,10 +23,6 @@ from .models import Order, Status
 def is_valid_query(params):
     return params is not None and params != ''
 
-# def calculate_order_quantities(order):
-#     order_details = order.get_products.all()
-
-
 def calculate_subtotals(order):
     order_details = order.get_products.all().annotate(
         subtotal_combos = ExpressionWrapper(
@@ -37,6 +33,33 @@ def calculate_subtotals(order):
         )
     )
     return order_details
+
+def calculate_products_quantites(order):
+    products = Product.objects.all()
+
+    product_quantities = [{'product': product.name, 'quantity': 0} for product in products]
+    for order_detail in order.get_products.all():
+        if order_detail.combo is not None:
+            for combo_item in order_detail.combo.products.all():
+                for product_quantity in product_quantities:
+                    if product_quantity.get('product') == combo_item.product.name:
+                        product_quantity.update(
+                            {
+                                'product': combo_item.product.name,
+                                'quantity': product_quantity.get('quantity') + (combo_item.quantity * order_detail.quantity)
+                            }
+                        )
+        else:
+            for product_quantity in product_quantities:
+                if product_quantity.get('product') == order_detail.product.name:
+                    product_quantity.update(
+                        {
+                            'product': order_detail.product.name,
+                            'quantity': order_detail.quantity
+                        }
+                    )
+    
+    return product_quantities
 
 def get_all_orders(request):
     
@@ -99,9 +122,10 @@ def get_order_details(request, pk):
     incomes = order.incomes.all()
 
 
-    order_details_with_subtotals = calculate_subtotals(order)
+    product_quantities = calculate_products_quantites(order)
+    
     # get order's details and calculate subtotals
-    print(order_details_with_subtotals)
+    order_details_with_subtotals = calculate_subtotals(order)
 
     quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
 
@@ -122,7 +146,8 @@ def get_order_details(request, pk):
         'quantity_total': quantity_sum['quantity__sum'],
         'order': order,
         'incomes': incomes,
-        'order_details_with_subtotals': order_details_with_subtotals
+        'order_details_with_subtotals': order_details_with_subtotals,
+        'product_quantities': product_quantities
     })
 
 # open a transaction

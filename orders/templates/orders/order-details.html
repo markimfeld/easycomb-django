@@ -106,7 +106,9 @@ Detalle del Pedido
 
                                     </td>
                                     <td class="text-center">
-                                        <span class="text-bold h5">{{ quantity_total }}</span>
+                                        {% if order_detail.combo is not None %}
+                                            <span class="text-bold h5">{{ quantity_total }}</span>
+                                        {% endif %}
                                     </td>
                                     <td class="text-center">
                                         {% if combos_total > 0 %}
@@ -137,22 +139,12 @@ Detalle del Pedido
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
+                            {% for product_quantity in product_quantities %}
                             <li class="list-group-item d-flex justify-content-between">
-                                <div>Empanadas</div>
-                                <div><span class="badge badge-info float right">5</span></div>
+                                <div>{{ product_quantity.product }}</div>
+                                <div><span class="badge badge-info float right">{{ product_quantity.quantity}}</span></div>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <div>Fideos</div>
-                                <div><span class="badge badge-info float right">5</span></div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <div>Pascualinas</div>
-                                <div><span class="badge badge-info float right">5</span></div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <div>Ravioles</div>
-                                <div><span class="badge badge-info float right">5</span></div>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
