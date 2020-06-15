@@ -14,18 +14,6 @@ Detalle del Pedido
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col">
-                                <div class="card-tools float-right">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"
-                                        data-toggle="tooltip" title="Collapse">
-                                        <i class="fas fa-minus"></i></button>
-                                    <button type="button" class="btn btn-tool" data-card-widget="remove"
-                                        data-toggle="tooltip" title="Remove">
-                                        <i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col d-flex flex-column">
                                 <h3 class="card-title"><span class="text-bold h3">Cliente: </span><a
                                         href="{% url 'clients:customer_details' order.customer.id %}"><span
@@ -139,7 +127,38 @@ Detalle del Pedido
                     </div>
                 </div>
                 <!-- /.card -->
+                
+                <!-- totals product's qunatities -->
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <h3 class="card-title">
+                            Totales de Productos para preparar
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div>Empanadas</div>
+                                <div><span class="badge badge-info float right">5</span></div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div>Fideos</div>
+                                <div><span class="badge badge-info float right">5</span></div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div>Pascualinas</div>
+                                <div><span class="badge badge-info float right">5</span></div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div>Ravioles</div>
+                                <div><span class="badge badge-info float right">5</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
+            
             <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-header bg-dark">
@@ -209,6 +228,8 @@ Detalle del Pedido
             <!-- /.col -->
         </div>
     </div>
+
+    
 </section>
 <!-- /.content -->
 {% endblock content %}

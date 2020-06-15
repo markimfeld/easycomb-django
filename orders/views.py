@@ -22,7 +22,11 @@ from .models import Order, Status
 
 def is_valid_query(params):
     return params is not None and params != ''
-    
+
+# def calculate_order_quantities(order):
+#     order_details = order.get_products.all()
+
+
 def calculate_subtotals(order):
     order_details = order.get_products.all().annotate(
         subtotal_combos = ExpressionWrapper(
@@ -94,13 +98,20 @@ def get_order_details(request, pk):
     order = Order.objects.get(pk=pk)
     incomes = order.incomes.all()
 
+    order_details = order.get_products.all()
+    for order_detail in order_details:
+        products = [{combo_item.product.name, combo_item.quantity * order_detail.quantity} for combo_item in order_detail.combo.products.all()]
+
+    # print(products)
+
     # get order's details and calculate subtotals
-    order_details = calculate_subtotals(order)
+    order_details_with_subtotals = calculate_subtotals(order)
+    print(order_details_with_subtotals)
 
     quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
 
-    total_combo = order_details.aggregate(Sum('subtotal_combos'))
-    total_products = order_details.aggregate(Sum('subtotal_products'))
+    total_combo = order_details_with_subtotals.aggregate(Sum('subtotal_combos'))
+    total_products = order_details_with_subtotals.aggregate(Sum('subtotal_products'))
 
     incomes_sum = order.incomes.all().aggregate(Sum('amount'))
 
@@ -116,7 +127,7 @@ def get_order_details(request, pk):
         'quantity_total': quantity_sum['quantity__sum'],
         'order': order,
         'incomes': incomes,
-        'order_details': order_details
+        'order_details': order_details_with_subtotals
     })
 
 # open a transaction
@@ -135,6 +146,7 @@ def add_new_order(request):
             
             if formset.is_valid():
                 order_items = formset.save(commit=False)
+                print(formset.cleaned_data)
                 for order_item in order_items:
                     has_stock = True
                     if order_item.combo is not None:
@@ -152,7 +164,7 @@ def add_new_order(request):
                         if order_item.product.stock >= order_item.quantity:
                             # decrease the product stock
                             Product.objects.filter(id=order_item.product.id).update(stock=F('stock') - order_item.quantity)
-                    print(has_stock)
+                    # print(has_stock)
                     if has_stock:
                         order_item.save()
                         transaction.savepoint_commit(sid)
