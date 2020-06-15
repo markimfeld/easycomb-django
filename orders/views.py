@@ -16,7 +16,7 @@ from .forms import (
     ChangeStatusOrderForm,
 )
 from clients.models import Customer
-from inventory.models import Product
+from inventory.models import Product, Combo
 from .models import Order, Status
 
 
@@ -98,14 +98,9 @@ def get_order_details(request, pk):
     order = Order.objects.get(pk=pk)
     incomes = order.incomes.all()
 
-    order_details = order.get_products.all()
-    for order_detail in order_details:
-        products = [{combo_item.product.name, combo_item.quantity * order_detail.quantity} for combo_item in order_detail.combo.products.all()]
 
-    # print(products)
-
-    # get order's details and calculate subtotals
     order_details_with_subtotals = calculate_subtotals(order)
+    # get order's details and calculate subtotals
     print(order_details_with_subtotals)
 
     quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
@@ -127,7 +122,7 @@ def get_order_details(request, pk):
         'quantity_total': quantity_sum['quantity__sum'],
         'order': order,
         'incomes': incomes,
-        'order_details': order_details_with_subtotals
+        'order_details_with_subtotals': order_details_with_subtotals
     })
 
 # open a transaction
@@ -145,32 +140,29 @@ def add_new_order(request):
             formset = OrderDetailInlineFormSet(request.POST, instance=new_order)
             
             if formset.is_valid():
-                order_items = formset.save(commit=False)
-                print(formset.cleaned_data)
-                for order_item in order_items:
-                    has_stock = True
-                    if order_item.combo is not None:
-                        order_item.price_combo = order_item.combo.price
-                        for combo_item in order_item.combo.products.all():
-                            # if the stock is more than or equal to the quantity that was requested so its okay
-                            if combo_item.product.stock >= (order_item.quantity * combo_item.quantity):
-                                # decrease the product stock
-                                Product.objects.filter(id=combo_item.product.id).update(stock=F('stock') - (order_item.quantity * combo_item.quantity))
-                            else:
-                                has_stock = False
-                    if order_item.product is not None:
-                        order_item.price_product = order_item.product.retail_price
-                        # if the stock is more than or equal the quantity that was requested so its okay
-                        if order_item.product.stock >= order_item.quantity:
-                            # decrease the product stock
-                            Product.objects.filter(id=order_item.product.id).update(stock=F('stock') - order_item.quantity)
-                    # print(has_stock)
-                    if has_stock:
-                        order_item.save()
+                order_details = formset.save(commit=False)
+
+                if not are_combos(order_details):
+                    if check_stock(order_details):
+                        for order_detail in order_details:
+                            set_price(order_detail)
+                            decrease_product_stock(order_detail.product, order_detail.quantity)
+                            order_detail.save()
                         transaction.savepoint_commit(sid)
                         return HttpResponseRedirect(reverse('orders:orders'))
                     else:
                         transaction.savepoint_rollback(sid)
+                if check_stock(order_details):
+                    for order_detail in order_details:
+                        set_price(order_detail)
+                        for combo_item in order_detail.combo.products.all():
+                            decrease_product_stock(combo_item.product, (order_detail.quantity * combo_item.quantity))
+                        order_detail.save()
+                    
+                    transaction.savepoint_commit(sid)
+                    return HttpResponseRedirect(reverse('orders:orders'))
+                else:
+                    transaction.savepoint_rollback(sid)
 
     return render(request, 'orders/order-add.html', {
         'form': NewOrderForm(),
@@ -201,10 +193,42 @@ def delete_order(request, pk):
         for order_item in order.get_products.all():
             if order_item.combo is not None:
                 for combo_item in order_item.combo.products.all():
-                    Product.objects.filter(id=combo_item.product.id).update(stock=F('stock') + (order_item.quantity * combo_item.quantity))
+                    increase_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
             else:
-                Product.objects.filter(id=order_item.product.id).update(stock=F('stock') + order_item.quantity)
+                increase_product_stock(order_item.product, order_item.quantity)
         
         order.delete()
 
         return HttpResponseRedirect(reverse('orders:orders'))
+
+def are_combos(order_details):
+    verify = [type(order_detail.combo) == Combo for order_detail in order_details]
+    return all(verify)
+
+def check_stock(order_details):
+    if are_combos(order_details):
+        combos = [check_combo_stock(order_detail.combo, order_detail.quantity) for order_detail in order_details]
+        return all(combos)
+    else:
+        products = [check_product_stock(order_detail.product, order_detail.quantity) for order_detail in order_details]
+        return all(products)
+
+def check_combo_stock(combo, quantity):
+    items = [check_product_stock(combo_item.product, (quantity * combo_item.quantity)) for combo_item in combo.products.all()]
+    return all(items)
+
+def check_product_stock(product, quantity):
+    return product.stock >= quantity
+
+def decrease_product_stock(product,quantity):
+    Product.objects.filter(id=product.id).update(stock=F('stock') - quantity)
+
+def increase_product_stock(product, quantity):
+    Product.objects.filter(id=product.id).update(stock=F('stock') + quantity)
+
+def set_price(order_item):
+    if type(order_item.combo) == Combo:
+        order_item.price_combo = order_item.combo.price
+    if type(order_item.product) == Product:
+        order_item.price_product = order_item.product.retail_price
+

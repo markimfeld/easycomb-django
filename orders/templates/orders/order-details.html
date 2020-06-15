@@ -54,7 +54,7 @@ Detalle del Pedido
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for order_detail in order_details %}
+                                {% for order_detail in order_details_with_subtotals %}
                                 <tr>
                                     <td>
                                         {% if order_detail.combo is not None %}
