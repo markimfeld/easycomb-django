@@ -91,7 +91,7 @@ Pedidos
                         </td>
                         <td>
                             <a href="{% url 'clients:customer_details' order.customer.id %}">
-                                {{ order.customer.first_name }}
+                                {{ order.customer.first_name }} {{ order.customer.last_name }}
                             </a>
                         </td>
                         <td>
