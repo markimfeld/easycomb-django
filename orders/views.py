@@ -206,10 +206,16 @@ def edit_order(request, pk):
         
         if form.is_valid():
             sid = transaction.savepoint()
+
+            # for order_item in order.get_products.all():
+            #         for combo_item in order_item.combo.products.all():
+            #             Product.objects.filter(id=combo_item.product.id).update(stock=F('stock') + (order_item.quantity * combo_item.quantity))
+                        # increase_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
+
             # transaction now contains new_order.save()
             formset = OrderDetailInlineFormSet(request.POST, instance=order)
-            if formset.is_valid():
 
+            if formset.is_valid():
                 order_details = formset.save(commit=False)
 
                 if not are_combos(order_details):
@@ -232,10 +238,6 @@ def edit_order(request, pk):
                         transaction.savepoint_rollback(sid)
                 
                 if check_stock(order_details):
-                    for order_item in order.get_products.all():
-                        for combo_item in order_item.combo.products.all():
-                            increase_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
-                    
                     for order_detail in order_details:
                         set_price(order_detail)
                         for combo_item in order_detail.combo.products.all():
@@ -245,9 +247,6 @@ def edit_order(request, pk):
                     transaction.savepoint_commit(sid)
                     return HttpResponseRedirect(reverse('orders:orders'))
                 else:
-                    for order_item in order.get_products.all():
-                        for combo_item in order_item.combo.products.all():
-                            decrease_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
                     transaction.savepoint_rollback(sid)
 
     return render(request, 'orders/order-edit.html', {

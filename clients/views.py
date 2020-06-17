@@ -34,7 +34,6 @@ class CustomerListView(ListView):
     model = Customer
     template_name = 'clients/customers.html'
 
-
 def get_customer_details(request, pk):
     customer = Customer.objects.get(pk=pk)
 
