@@ -92,5 +92,5 @@ OrderDetailInlineFormSet = forms.inlineformset_factory(
     Order,
     OrderDetail,
     form=NewOrderDetailForm,
-    extra=4
+    extra=1
 )
