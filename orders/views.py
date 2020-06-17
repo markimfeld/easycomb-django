@@ -194,6 +194,15 @@ def add_new_order(request):
         'formset': OrderDetailInlineFormSet()
     })
 
+def edit_order(request, pk):
+    order = Order.objects.get(pk=pk)
+    
+    return render(request, 'order/order-edit.html', {
+        'order': order,
+        'form': NewOrderForm(instance=order),
+        'formset': OrderDetailInlineFormSet(instance=order)
+    })
+
 def change_status_order(request, pk):
     order = Order.objects.get(pk=pk)
 
