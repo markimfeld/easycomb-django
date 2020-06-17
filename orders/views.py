@@ -8,6 +8,8 @@ from django.db.models import (
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
 
+
+
 # Create your views here.
 from .forms import (
     NewOrderForm,
@@ -207,11 +209,8 @@ def edit_order(request, pk):
             # transaction now contains new_order.save()
             formset = OrderDetailInlineFormSet(request.POST, instance=order)
             if formset.is_valid():
-                
-
 
                 order_details = formset.save(commit=False)
-
 
                 if not are_combos(order_details):
                     # restore stock
@@ -219,7 +218,6 @@ def edit_order(request, pk):
                         increase_product_stock(order_item.product, order_item.quantity)
                     
                     if check_stock(order_details):
-                        
                         # new stock
                         for order_detail in order_details:
                             set_price(order_detail)
@@ -232,6 +230,7 @@ def edit_order(request, pk):
                         for order_item in order.get_products.all():
                             decrease_product_stock(order_item.product, order_item.quantity)
                         transaction.savepoint_rollback(sid)
+                
                 if check_stock(order_details):
                     for order_item in order.get_products.all():
                         for combo_item in order_item.combo.products.all():

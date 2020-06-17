@@ -6,6 +6,7 @@ from django.db.models import (
 )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
+from django.views.generic.list import ListView
 
 # Create your views here.
 from .models import Customer
@@ -28,10 +29,11 @@ def calculate_total_orders(orders):
 
     return total
 
-def get_all_clients(request):
-    return render(request, 'clients/customers.html', {
-        'customers': Customer.objects.all()
-    })
+
+class CustomerListView(ListView):
+    model = Customer
+    template_name = 'clients/customers.html'
+
 
 def get_customer_details(request, pk):
     customer = Customer.objects.get(pk=pk)
@@ -84,3 +86,4 @@ def deactivate_customer(request, pk):
         customer.status = False
         customer.save()
         return HttpResponseRedirect(reverse('clients:customers'))
+
