@@ -23,7 +23,7 @@ Editar Pedido
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="" method="post" role="form">
+        <form action="{% url 'orders:edit_order' order.id %}" method="post" role="form">
             {% csrf_token %}
             <div class="card-body">
                 <div class="form-group">
@@ -50,9 +50,9 @@ Editar Pedido
                             <div id="form_set">
                                 {{ formset.management_form }}
                                 {% for form in formset %}
-                                <!-- {% for hidden in form.hidden_fields %}
+                                {% for hidden in form.hidden_fields %}
                                 {{ hidden }}
-                                {% endfor %} -->
+                                {% endfor %}
                                 <div class="card-body">
                                     <div class="row form-row">
                                         <div class="form-group combos col-3">

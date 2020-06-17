@@ -194,10 +194,64 @@ def add_new_order(request):
         'formset': OrderDetailInlineFormSet()
     })
 
+# open a transaction
+@transaction.atomic
 def edit_order(request, pk):
     order = Order.objects.get(pk=pk)
-    
-    return render(request, 'order/order-edit.html', {
+
+    if request.method == 'POST':
+        form = NewOrderForm(request.POST, instance=order)
+        
+        if form.is_valid():
+            sid = transaction.savepoint()
+            # transaction now contains new_order.save()
+            formset = OrderDetailInlineFormSet(request.POST, instance=order)
+            if formset.is_valid():
+                
+
+
+                order_details = formset.save(commit=False)
+
+
+                if not are_combos(order_details):
+                    # restore stock
+                    for order_item in order.get_products.all():
+                        increase_product_stock(order_item.product, order_item.quantity)
+                    
+                    if check_stock(order_details):
+                        
+                        # new stock
+                        for order_detail in order_details:
+                            set_price(order_detail)
+                            decrease_product_stock(order_detail.product, order_detail.quantity)
+                            order_detail.save()
+                        transaction.savepoint_commit(sid)
+                        return HttpResponseRedirect(reverse('orders:orders'))
+                    else:
+                        # restore stock
+                        for order_item in order.get_products.all():
+                            decrease_product_stock(order_item.product, order_item.quantity)
+                        transaction.savepoint_rollback(sid)
+                if check_stock(order_details):
+                    for order_item in order.get_products.all():
+                        for combo_item in order_item.combo.products.all():
+                            increase_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
+                    
+                    for order_detail in order_details:
+                        set_price(order_detail)
+                        for combo_item in order_detail.combo.products.all():
+                            decrease_product_stock(combo_item.product, (order_detail.quantity * combo_item.quantity))
+                        order_detail.save()
+                    
+                    transaction.savepoint_commit(sid)
+                    return HttpResponseRedirect(reverse('orders:orders'))
+                else:
+                    for order_item in order.get_products.all():
+                        for combo_item in order_item.combo.products.all():
+                            decrease_product_stock(combo_item.product, (order_item.quantity * combo_item.quantity))
+                    transaction.savepoint_rollback(sid)
+
+    return render(request, 'orders/order-edit.html', {
         'order': order,
         'form': NewOrderForm(instance=order),
         'formset': OrderDetailInlineFormSet(instance=order)
