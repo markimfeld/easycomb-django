@@ -198,7 +198,7 @@ def add_new_order(request):
 
 def edit_order(request, pk):
     order = Order.objects.get(pk=pk)
-
+    order_details_tem = order.get_products.all()
     if request.method == 'POST':
         form = NewOrderForm(request.POST, instance=order)
         
@@ -221,7 +221,9 @@ def edit_order(request, pk):
                     for order_detail in order_details:
                         set_price(order_detail)
                         for combo_item in order_detail.combo.products.all():
-                            decrease_product_stock(combo_item.product, (order_detail.quantity * combo_item.quantity))
+                            for order_detail_tem in order_details_tem:
+                                if order_detail_tem.combo.id == order_detail.combo.id and order_detail_tem.quantity < order_detail.quantity:
+                                    decrease_product_stock(combo_item.product, ((order_detail.quantity - order_detail_tem.quantity) * combo_item.quantity))
                         order_detail.save()
                     
                     return HttpResponseRedirect(reverse('orders:orders'))
