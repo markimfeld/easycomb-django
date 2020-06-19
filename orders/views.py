@@ -198,7 +198,6 @@ def add_new_order(request):
 
 def edit_order(request, pk):
     order = Order.objects.get(pk=pk)
-    order_copy = order
 
     if request.method == 'POST':
         form = NewOrderForm(request.POST, instance=order)
