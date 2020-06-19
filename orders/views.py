@@ -285,10 +285,16 @@ def check_combo_stock(combo, quantity):
     return all(items)
 
 def check_product_stock(product, quantity):
-    return product.stock >= quantity
+    try:
+        return product.stock >= quantity
+    except Exception as e:
+        print(e)
 
 def decrease_product_stock(product,quantity):
-    Product.objects.filter(id=product.id).update(stock=F('stock') - quantity)
+    try:
+        Product.objects.filter(id=product.id).update(stock=F('stock') - quantity)
+    except Exception as e:
+        print(e)
 
 def increase_product_stock(product, quantity):
     Product.objects.filter(id=product.id).update(stock=F('stock') + quantity)
