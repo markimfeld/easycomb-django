@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.shortcuts import render
 
 
@@ -10,9 +10,15 @@ from orders.models import Order, Status
 def index(request):
 
     orders = Order.objects.all()
-    combos = Combo.objects.annotate(Count('order'))
-    print(combos.values_list('name', 'order__count'))
-    
+    # combos = Combo.objects.annotate(Count('order'))
+    combos_sales = [(combo, combo.get_orders.all().aggregate(total=Sum('quantity'))) for combo in Combo.objects.all()]
+    # combos = [(combo_sale[0], combo_sale[1]['total']) for combo_sale in combos_sales]
+    combos = []
+    for combo_sale in combos_sales:
+        if combo_sale[1]['total'] is not None:
+            combos.append({'combo': combo_sale[0], 'sales': combo_sale[1]['total']})
+
+
     status = Status.objects.first()
 
     return render(request, 'easycomb_theme/index.html', {
