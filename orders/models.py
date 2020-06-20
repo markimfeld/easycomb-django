@@ -27,7 +27,7 @@ class Order(models.Model):
 
 
 class OrderDetail(models.Model):
-    combo = models.ForeignKey(Combo, on_delete=models.CASCADE, blank=True, null=True)
+    combo = models.ForeignKey(Combo, on_delete=models.CASCADE, blank=True, null=True, related_name="quantity")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='get_products')
     description = models.CharField(max_length=100, blank=True)
