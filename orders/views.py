@@ -149,7 +149,7 @@ def get_order_details(request, pk):
         'order': order,
         'incomes': incomes,
         'order_details_with_subtotals': order_details_with_subtotals,
-        'product_quantities': product_quantities
+        'product_quantities': product_quantities,
     })
 
 # open a transaction
