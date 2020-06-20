@@ -176,14 +176,14 @@ Escritorio
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for item in combos %}
+                                    {% for combo in combos %}
                                     <tr>
                                         <td>
-                                            {{ item.combo.name }} 
+                                            {{ combo.name }} 
                                         </td>
-                                        <td>{{ item.combo.price }}</td>
+                                        <td>{{ combo.price }}</td>
                                         <td>
-                                            <span class="badge badge-info">{{ item.sales }}</span> Vendidos
+                                            <span class="badge badge-info">{{ combo.sales }}</span> Vendidos
                                         </td>
                                         <td>
                                             <a href="#" class="text-muted">

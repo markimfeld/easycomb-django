@@ -1,4 +1,5 @@
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Value as V
+from django.db.models.functions import Coalesce
 from django.shortcuts import render
 
 
@@ -10,14 +11,9 @@ from orders.models import Order, Status
 def index(request):
 
     orders = Order.objects.all()
-    # combos = Combo.objects.annotate(Count('order'))
-    combos_sales = [(combo, combo.get_orders.all().aggregate(total=Sum('quantity'))) for combo in Combo.objects.all()]
-    # combos = [(combo_sale[0], combo_sale[1]['total']) for combo_sale in combos_sales]
-    combos = []
-    for combo_sale in combos_sales:
-        if combo_sale[1]['total'] is not None:
-            combos.append({'combo': combo_sale[0], 'sales': combo_sale[1]['total']})
 
+    # get total combos sales, only if had sales
+    combos = Combo.objects.annotate(sales=(Coalesce(Sum('order__get_products__quantity'), V(0)))).filter(sales__gt=0).order_by('-sales')
 
     status = Status.objects.first()
 
