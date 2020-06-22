@@ -15,6 +15,8 @@ def index(request):
     # get total combos sales, only if had sales
     combos = Combo.objects.annotate(sales=(Coalesce(Sum('order__get_products__quantity'), V(0)))).filter(sales__gt=0).order_by('-sales')
 
+
+    
     status = Status.objects.first()
 
     return render(request, 'easycomb_theme/index.html', {

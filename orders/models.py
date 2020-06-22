@@ -33,7 +33,8 @@ class OrderDetail(models.Model):
     description = models.CharField(max_length=100, blank=True)
     price_combo = models.FloatField(default=0)
     price_product = models.FloatField(default=0)
-    quantity = models.IntegerField(default=1)  
+    quantity = models.PositiveIntegerField(default=1)  
+
 
     def __str__(self):
         msg = ''
