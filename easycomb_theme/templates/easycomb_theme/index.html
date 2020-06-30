@@ -170,21 +170,21 @@ Escritorio
                             <table class="table table-striped table-valign-middle">
                                 <thead>
                                     <tr>
-                                    <th style="width: 50%;">Producto</th>
+                                    <th style="width: 40%;">Producto</th>
                                     <th>Precio</th>
                                     <th>Ventas</th>
                                     <th>Más</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for combo in combos %}
+                                    {% for combo in most_selled_combos %}
                                     <tr>
                                         <td>
-                                            {{ combo.name }} 
+                                            {{ combo.combo__name }} 
                                         </td>
-                                        <td>{{ combo.price }}</td>
+                                        <td>${{ combo.combo__price }}</td>
                                         <td>
-                                            <span class="badge badge-info">{{ combo.sales }}</span> Vendidos
+                                            <span class="badge badge-info">{{ combo.total_sales }}</span> Vendidos
                                         </td>
                                         <td>
                                             <a href="#" class="text-muted">

@@ -18,7 +18,7 @@ class Supplier(models.Model):
 
 
 class Purchase(models.Model):
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, default=0)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     date = models.DateField()
     remarks = models.CharField(max_length=100, blank=True, null=True)
     products = models.ManyToManyField(Product, through='PurchaseDetail')
