@@ -6,6 +6,8 @@
 <!-- Tempusdominus Bbootstrap 4 -->
 <link rel="stylesheet"
     href="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.css' %}">
 {% endblock header-resource %}
 
 {% block page-title %}
@@ -88,6 +90,35 @@ Escritorio
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-7">
+                    <!-- /.card -->
+					<!-- PIE CHART -->
+            		<div class="card">
+              			<div class="card-header d-flex align-items-center">
+						  <h3 class="card-title mr-4">Combos más vendidos</h3>
+							<!-- Date range -->
+							<form id="dateRangeForm" method="get" class="form-inline">
+								<div class="form-group">
+									<label class="mr-3">Rango de Fecha: </label>
+                  					<div class="input-group">
+                    					<div class="input-group-prepend">
+                      						<span class="input-group-text">
+                        						<i class="far fa-calendar-alt"></i>
+                      						</span>
+                    					</div>
+                    					<input type="text" class="form-control float-right" id="reservation">
+                  					</div>
+								</div>
+								<input name="startDate" type="hidden" id="startDate">
+								<input name="endDate" type="hidden" id="endDate">
+                  				<!-- /.input group -->
+							</form>
+              			</div>
+              			<div class="card-body">
+                			<canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 100%;"></canvas>
+              			</div>
+              			<!-- /.card-body -->
+            		</div>
+            		<!-- /.card -->
                 <!-- TABLE: LATEST ORDERS -->
                 <div class="card">
                     <div class="card-header border-transparent">
@@ -202,8 +233,7 @@ Escritorio
                             </table>
                         </div>
                     </div>
-                    <!-- /.card -->
-            </div>
+            	</div>
 
             <!-- right col (We are only adding the ID to make the widgets sortable)-->
             <section class="col-lg-5 connectedSortable">
@@ -224,24 +254,30 @@ Escritorio
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body p-0">
-                <ul class="list-group">
-                    {% for product in products %}
-                    <li class="list-group-item">
-                        <span>{{ product.name }}</span>
-                        {% if product.stock > 20 %}
-                            <span class="badge badge-success float-right">{{ product.stock }}</span>
-                        {% elif product.stock > 0 %}
-                            <span class="badge badge-warning float-right">{{ product.stock }}</span>
-                        {% else %}
-                            <span class="badge badge-danger float-right">{{ product.stock }}</span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
+				  <div class="col p-3">
+					{% for product in stock_stats %}
+                    <div class="progress-group">
+					  {{ product.product__name }}
+					  <span class="float-right"><b>{{ product.product__stock }}</b>/{{ product.quantity }}</span>
+                      <div class="progress progress-sm">
+						{% if product.total_percentages > 80 %}	
+						<div class="progress-bar bg-primary" style="width: {{ product.total_percentages }}%"></div>
+						{% elif product.total_percentages > 50 %}
+						<div class="progress-bar bg-success" style="width: {{ product.total_percentages }}%"></div>
+						{% elif product.total_percentages > 20 %}
+						<div class="progress-bar bg-warning" style="width: {{ product.total_percentages }}%"></div>
+						{% else %}
+						<div class="progress-bar bg-danger" style="width: {{ product.total_percentages }}%"></div>
+						{% endif %}
+                      </div>
+                    </div>
+                    <!-- /.progress-group -->
+					{% endfor %}
+                  </div>
+                  <!-- /.col -->
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer text-center">
-                <a href="javascript:void(0)" class="uppercase">View All Products</a>
                 </div>
                 <!-- /.card-footer -->
             </div>
@@ -299,13 +335,51 @@ Escritorio
 <script src="{% static 'easycomb_theme/plugins/moment/moment.min.js' %}"></script>
 <script src="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.js' %}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script
-    src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- ChartJS -->
+<script src="{% static 'easycomb_theme/plugins/chart.js/Chart.min.js' %}"></script>
 <script>
+  
     // The Calender
     $('#calendar').datetimepicker({
         format: 'L',
         inline: true
     })
+
+	//Date range picker
+    $('#reservation').daterangepicker()
+	$('#reservation').on('apply.daterangepicker', function(ev, picker) {
+	  const startDate = $('#startDate').val(picker.startDate.format('YYYY-MM-DD'));
+	  const endDate = $('#endDate').val(picker.endDate.format('YYYY-MM-DD'));
+	  $('#dateRangeForm').submit();
+  		console.log(startDate.val());
+  		console.log(endDate.val());
+	});	
+	//-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+	
+  	$.ajax({
+		url: 'api/data/',
+		method: 'GET',
+		success: data => {
+		  	labels = data.labels;
+		  	defaultData = data.datasets[0].data;
+		  	backgroundColor = data.backgroundColor;
+    		const pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    		const pieChart = new Chart(pieChartCanvas, {
+      			type: 'doughnut',
+			  	data: {
+			  		labels: labels,
+				  	datasets: [{
+					  	label: 'Combos más vendidos',
+						data: defaultData,
+					  	backgroundColor: backgroundColor, 
+				  	}]
+				}
+    		})
+		}
+  	});
 </script>
 {% endblock page-script %}
