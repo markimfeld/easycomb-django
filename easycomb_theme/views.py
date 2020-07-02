@@ -9,25 +9,18 @@ from inventory.models import Product, Combo
 from orders.models import Order, Status, OrderDetail
 from suppliers.models import PurchaseDetail
 
+
+def is_valid_params(params):
+    return params is not None and params != ''
+
+
 def index(request):
 
     orders = Order.objects.all()
     order_details = OrderDetail.objects.all().select_related('combo', 'order')
-    
-    # startDate = request.GET.get('startDate')
-    # endDate = request.GET.get('endDate')
-
-    # get total combos sales, only if had sales
-    # most_selled_combos = order_details.filter(order__date__gte=startDate, order__date__lte=endDate) \
-     #   .exclude(combo=None).values('combo__name', 'combo__price').annotate(total_sales=Coalesce(Sum('quantity'), V(0))).order_by('-total_sales')
-
-
-    most_selled_combos = order_details.exclude(combo=None).values('combo__name', 'combo__price') \
-        .annotate(total_sales=Coalesce(Sum('quantity'), V(0))).order_by('-total_sales')
 
     status = Status.objects.first()
-    
-    
+
     purchase_details = PurchaseDetail.objects.all().select_related('purchase'); 
     stock_stats = purchase_details.filter(purchase__date__exact='2020-6-17') \
         .annotate(total_percentages=Cast(((Cast(F('product__stock'), FloatField()) / Cast(F('quantity'), FloatField())) * 100.0), IntegerField())) \
@@ -35,7 +28,6 @@ def index(request):
 
 
     return render(request, 'easycomb_theme/index.html', {
-        'most_selled_combos': most_selled_combos,
         'products': Product.objects.all(),
         'stock_stats': stock_stats,
         'orders': Order.objects.all(),
@@ -47,18 +39,17 @@ def index(request):
 
 def get_total_combos(request, *args, **kwargs):
 
-    #startDate = request.GET.get('startDate')
-    #endDate = request.GET.get('endDate')
-
     order_details = OrderDetail.objects.all().select_related('combo', 'order')
-    # get total combos sales, only if had sales
-    #most_selled_combos = order_details.filter(order__date__gte=startDate, order__date__lte=endDate) \
-    #    .exclude(combo=None).values('combo__name', 'combo__price').annotate(total_sales=Coalesce(Sum('quantity'), V(0))).order_by('-total_sales')
-
 
     most_selled_combos = order_details.exclude(combo=None).values('combo__name', 'combo__price').annotate(total_sales=Coalesce(Sum('quantity'), V(0))).order_by('-total_sales')
 
+    startDate = request.POST.get('startDate')
+    endDate = request.POST.get('endDate')
 
+
+    if (is_valid_params(startDate) and is_valid_params(endDate)):
+        most_selled_combos = order_details.filter(order__date__gte=startDate, order__date__lte=endDate) \
+        .exclude(combo=None).values('combo__name', 'combo__price').annotate(total_sales=Coalesce(Sum('quantity'), V(0))).order_by('-total_sales')
 
     status = Status.objects.first()
 
@@ -70,8 +61,8 @@ def get_total_combos(request, *args, **kwargs):
         'datasets': [
             {
                 'data': data
-            },
-        ],
+                },
+            ],
         'backgroundColor': backgroundColor
     }
 
