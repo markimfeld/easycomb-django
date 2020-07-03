@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect
 
@@ -14,6 +15,7 @@ from .models import (
     Combo
 )
 
+@login_required
 def get_all_combos(request):
     
     combos = Combo.objects.all()
@@ -37,6 +39,7 @@ def get_all_combos(request):
         'combos': Combo.objects.all()
     })
 
+@login_required
 def add_new_combo(request):
     if request.method == 'POST':
         form = NewComboForm(request.POST)
@@ -55,6 +58,7 @@ def add_new_combo(request):
         'formset': ComboDetailInlineFormSet()
     })
 
+@login_required
 def edit_combo(request, pk):
     combo = Combo.objects.get(pk=pk)
 
@@ -77,6 +81,7 @@ def edit_combo(request, pk):
         'formset': ComboDetailInlineFormSet(instance=combo)
     })
 
+@login_required
 def delete_combo(request, pk):
     combo = Combo.objects.get(pk=pk)
     
@@ -84,16 +89,19 @@ def delete_combo(request, pk):
         combo.delete()
         return HttpResponseRedirect(reverse('inventory:combos'))
 
+@login_required
 def get_combo_detail(request, pk):
     return render(request, 'inventory/combo-detail.html', {
         'combo': Combo.objects.get(pk=pk)
     })
 
+@login_required
 def get_all_products(request):
     return render(request, 'inventory/products.html', {
         'products': Product.objects.all()
     })
 
+@login_required
 def add_new_product(request):
 
     if request.method == 'POST':
@@ -113,6 +121,7 @@ def add_new_product(request):
         'form': NewProductForm()
     })
 
+@login_required
 def edit_product(request, pk):
     product = Product.objects.get(pk=pk)
     if request.method == 'POST':
@@ -128,6 +137,7 @@ def edit_product(request, pk):
         'product': product
     })
 
+@login_required
 def delete_product(request, pk):
     product = Product.objects.get(pk=pk)
 
@@ -136,11 +146,13 @@ def delete_product(request, pk):
 
         return HttpResponseRedirect(reverse('inventory:products'))
 
+@login_required
 def get_all_categories(request):
     return render(request, 'inventory/categories.html', {
         'categories': Category.objects.all()
     })
 
+@login_required
 def add_new_category(request):
     
     if request.method == 'POST':
@@ -160,6 +172,7 @@ def add_new_category(request):
         'form': NewCategoryForm()
     })
 
+@login_required
 def delete_category(request, pk):
     category = Category.objects.get(pk=pk)
 

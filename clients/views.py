@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import (
     F,
     ExpressionWrapper,
@@ -7,6 +8,7 @@ from django.db.models import (
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
 from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 from .models import Customer
@@ -29,11 +31,16 @@ def calculate_total_orders(orders):
 
     return total
 
-
 class CustomerListView(ListView):
     model = Customer
     template_name = 'clients/customers.html'
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CustomListView, self).dispatch(request, *args, **kwargs)
+
+
+@login_required
 def get_customer_details(request, pk):
     customer = Customer.objects.get(pk=pk)
 
@@ -46,6 +53,7 @@ def get_customer_details(request, pk):
         'total_to_paid': total_to_paid
     })
 
+@login_required
 def add_new_customer(request):
     if request.method == 'POST':
         form = NewCustomerForm(request.POST)
@@ -57,6 +65,7 @@ def add_new_customer(request):
         'form': NewCustomerForm()
     })
 
+@login_required
 def edit_customer(request, pk):
     customer = Customer.objects.get(pk=pk)
     if request.method == 'POST':
@@ -71,6 +80,7 @@ def edit_customer(request, pk):
         'form': NewCustomerForm(instance=customer)
     }) 
 
+@login_required
 def activate_customer(request, pk):
     customer = Customer.objects.get(pk=pk)
     if customer is not None:
@@ -78,6 +88,7 @@ def activate_customer(request, pk):
         customer.save()
         return HttpResponseRedirect(reverse('clients:customers'))
 
+@login_required
 def deactivate_customer(request, pk):
     customer = Customer.objects.get(pk=pk)
 

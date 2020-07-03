@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import (
     F, 
     ExpressionWrapper, 
@@ -19,11 +20,13 @@ from .models import (
     Product
 )
 
+@login_required
 def get_all_suppliers(request):
     return render(request, 'suppliers/suppliers.html', {
         'suppliers': Supplier.objects.all()
     })
 
+@login_required
 def add_new_supplier(request):
 
     if request.method == 'POST':
@@ -37,6 +40,7 @@ def add_new_supplier(request):
         'form': NewSupplierForm()
     })
 
+@login_required
 def delete_supplier(request, pk):
     supplier = Supplier.objects.get(pk=pk)
 
@@ -45,6 +49,7 @@ def delete_supplier(request, pk):
 
         return HttpResponseRedirect(reverse('suppliers:suppliers'))
 
+@login_required
 def edit_supplier(request, pk):
     supplier = Supplier.objects.get(pk=pk)
 
@@ -61,11 +66,13 @@ def edit_supplier(request, pk):
         'form': NewSupplierForm(instance=supplier)
     })
 
+@login_required
 def get_purchases(request):
     return render(request, 'suppliers/purchases.html', {
         'purchases': Purchase.objects.all()
     })
 
+@login_required
 def get_purchase_detail(request, pk):
     
     purchase = Purchase.objects.get(pk=pk)
@@ -84,6 +91,7 @@ def get_purchase_detail(request, pk):
         'total_purchased': total_purchased
     })
 
+@login_required
 def add_new_purchase(request):
 
     if request.method == 'POST':
@@ -108,6 +116,7 @@ def add_new_purchase(request):
         'formset': PurchaseDetailInlineFormSet()
     })
 
+@login_required
 def delete_purchase(request, pk):
     purchase = Purchase.objects.get(pk=pk)
 

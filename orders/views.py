@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import (
     F,
@@ -63,6 +64,7 @@ def calculate_products_quantites(order):
     
     return product_quantities
 
+@login_required
 def get_all_orders(request):
     
     customers = Customer.objects.filter(status=True).all()
@@ -87,6 +89,7 @@ def get_all_orders(request):
         'orders': orders
     })
 
+@login_required
 def register_order_paid(request, pk):
     order = Order.objects.get(pk=pk)
 
@@ -118,6 +121,7 @@ def register_order_paid(request, pk):
         'form': NewIncomeForm()
     })
 
+@login_required
 def get_order_details(request, pk):
     
     order = Order.objects.get(pk=pk)
@@ -152,6 +156,7 @@ def get_order_details(request, pk):
         'product_quantities': product_quantities,
     })
 
+@login_required
 # open a transaction
 @transaction.atomic
 def add_new_order(request):
@@ -196,6 +201,7 @@ def add_new_order(request):
         'formset': OrderDetailInlineFormSet()
     })
 
+@login_required
 def edit_order(request, pk):
     order = Order.objects.get(pk=pk)
     order_details_tem = order.get_products.all()
@@ -236,6 +242,7 @@ def edit_order(request, pk):
         'formset': OrderDetailInlineFormSet(instance=order)
     })
 
+@login_required
 def change_status_order(request, pk):
     order = Order.objects.get(pk=pk)
 
@@ -253,6 +260,7 @@ def change_status_order(request, pk):
         'form': ChangeStatusOrderForm(initial = {'status': order.status })
     })
 
+@login_required
 def delete_order(request, pk):
     order = Order.objects.get(pk=pk)
 

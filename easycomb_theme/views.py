@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum, Value as V, F, ExpressionWrapper, FloatField, IntegerField
 from django.db.models.functions import Coalesce, Cast
 from django.http import JsonResponse
@@ -13,7 +14,7 @@ from suppliers.models import PurchaseDetail
 def is_valid_params(params):
     return params is not None and params != ''
 
-
+@login_required
 def index(request):
 
     orders = Order.objects.all()
@@ -37,6 +38,7 @@ def index(request):
         'quantity_customers': Customer.objects.filter(status=True).all().count
     })
 
+@login_required
 def get_total_combos(request, *args, **kwargs):
 
     order_details = OrderDetail.objects.all().select_related('combo', 'order')

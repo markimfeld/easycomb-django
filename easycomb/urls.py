@@ -21,6 +21,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('', include('easycomb_theme.urls')),
+    path('accounts/', include('accounts.urls')),
     path('orders/', include('orders.urls')),
     path('clients/', include('clients.urls')),
     path('inventory/', include('inventory.urls')),
