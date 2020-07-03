@@ -37,7 +37,7 @@ class CustomerListView(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(CustomListView, self).dispatch(request, *args, **kwargs)
+        return super(CustomerListView, self).dispatch(request, *args, **kwargs)
 
 
 @login_required
