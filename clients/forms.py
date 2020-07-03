@@ -20,7 +20,8 @@ class NewCustomerForm(forms.ModelForm):
             ),
             'phone': forms.NumberInput(
                 attrs = {
-                    'class': 'form-control'
+                    'class': 'form-control',
+                    'min': '0'
                 }
             ),
             'city': forms.Select(

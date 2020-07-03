@@ -58,8 +58,10 @@ def add_new_customer(request):
     if request.method == 'POST':
         form = NewCustomerForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('clients:customers'))
+            customer = form.save(commit=False)
+            if not Customer.objects.filter(first_name__iexact=customer.first_name, last_name__iexact=customer.last_name).exists():
+                customer.save()
+                return HttpResponseRedirect(reverse('clients:customers'))
 
     return render(request, 'clients/customer-add.html', {
         'form': NewCustomerForm()
