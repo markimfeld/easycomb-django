@@ -2,7 +2,7 @@
 
 {% block section-title %}
 Productos
-<a class="btn btn-success btn-sm" href="{% url 'inventory:new_product' %}"><i class="fas fa-plus-circle">
+<a id="btnAddProduct" class="btn btn-success btn-sm" href="{% url 'inventory:new_product' %}"><i class="fas fa-plus-circle">
         Agregar</i></a>
 {% endblock section-title %}
 
@@ -133,3 +133,16 @@ Productos
 
 <!-- /.content -->
 {% endblock content %}
+
+{% block page-script %}
+<script type="text/javascript">
+/* add a shortcut with key 'a' for add client button */
+document.onkeydown = function (evt) {
+  const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+  if (keyCode === 65) {
+    const href = $('#btnAddProduct').attr('href');
+    window.location.href = href
+  }
+};
+</script>
+{% endblock page-script %}
