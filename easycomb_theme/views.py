@@ -33,7 +33,11 @@ def index(request):
         .annotate(subtotal_cost=ExpressionWrapper(F('quantity') * F('cost'), output_field=FloatField())) \
         .aggregate(total_cost=Sum('subtotal_cost'))
 
+    # total_revenues = order_details.    
     
+    # total combos sold
+    total_combos_sold = OrderDetail.objects.all().exclude(combo=None).aggregate(total=Coalesce(Sum('quantity'), V(0)))
+
 
     return render(request, 'easycomb_theme/index.html', {
         'products': Product.objects.all(),
@@ -42,7 +46,8 @@ def index(request):
         'quantity_orders': Order.objects.filter(status=status).all().count,
         'quantity_products': Product.objects.all().count,
         'quantity_combos': Combo.objects.all().count,
-        'quantity_customers': Customer.objects.filter(status=True).all().count
+        'quantity_customers': Customer.objects.filter(status=True).all().count,
+        'total_combos_sold': total_combos_sold['total']
     })
 
 @login_required

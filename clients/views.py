@@ -4,8 +4,10 @@ from django.db.models import (
     F,
     ExpressionWrapper,
     FloatField,
-    Sum
+    Sum,
+    Value as V
 )
+from django.db.models.functions import Coalesce
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
 from django.views.generic.list import ListView
@@ -28,7 +30,9 @@ def calculate_total_orders(orders):
         )
         total += order_details.aggregate(Sum('subtotal_combos'))['subtotal_combos__sum']
         total += order_details.aggregate(Sum('subtotal_products'))['subtotal_products__sum']
-    
+
+        money_received = order.incomes.all().aggregate(total=Coalesce(Sum('amount'), V(0)))
+        total -= money_received['total']
 
     return total
 

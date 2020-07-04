@@ -8,6 +8,9 @@
       href="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
 <!-- daterange picker -->
 <link rel="stylesheet" href="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.css' %}">
+ <!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
 {% endblock header-resource %}
 
 {% block page-title %}
@@ -43,7 +46,7 @@ Escritorio
         <div class="small-box bg-success">
           <div class="inner">
             <h3>{{ quantity_products }}</h3>
-            <p>Productos</p>
+            <p>Ventas Totales</p>
           </div>
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
@@ -57,12 +60,11 @@ Escritorio
         <!-- small box -->
         <div class="small-box bg-warning">
           <div class="inner">
-            <h3>{{ quantity_combos }}</h3>
-
-            <p>Combos</p>
+            <h3>{{ total_combos_sold  }}</h3>
+            <p>Combos Vendidos</p>
           </div>
           <div class="icon">
-            <i class="ion ion-person-add"></i>
+            <i class="ion ion-pie-graph"></i>
           </div>
           <a href="{% url 'inventory:combos' %}" class="small-box-footer">Más info <i
                                                  class="fas fa-arrow-circle-right"></i></a>
@@ -74,11 +76,10 @@ Escritorio
         <div class="small-box bg-danger">
           <div class="inner">
             <h3>{{ quantity_customers}}</h3>
-
             <p>Clientes</p>
           </div>
           <div class="icon">
-            <i class="ion ion-pie-graph"></i>
+            <i class="ion ion-android-people"></i>
           </div>
           <a href="{% url 'clients:customers' %}" class="small-box-footer">Más info <i
                                                   class="fas fa-arrow-circle-right"></i></a>
