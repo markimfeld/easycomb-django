@@ -34,12 +34,15 @@ def index(request):
         .aggregate(total_cost=Sum('subtotal_cost'))
 
     # total_revenues = order_details.    
-    
+    revenue = OrderDetail.objects.exclude(combo=None) \
+        .annotate(sub_total=ExpressionWrapper(F('price_combo') * F('quantity'), output_field=FloatField())) \
+        .aggregate(total=Sum('sub_total')) 
     # total combos sold
     total_combos_sold = OrderDetail.objects.all().exclude(combo=None).aggregate(total=Coalesce(Sum('quantity'), V(0)))
 
 
     return render(request, 'easycomb_theme/index.html', {
+        'revenue': revenue['total'],
         'products': Product.objects.all(),
         'stock_stats': stock_stats,
         'orders': Order.objects.all(),
