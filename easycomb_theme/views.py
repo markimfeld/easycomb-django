@@ -37,6 +37,9 @@ def index(request):
     revenue = OrderDetail.objects.exclude(combo=None) \
         .annotate(sub_total=ExpressionWrapper(F('price_combo') * F('quantity'), output_field=FloatField())) \
         .aggregate(total=Sum('sub_total')) 
+
+    # .filter(order__paid_status=True) \
+
     # total combos sold
     total_combos_sold = OrderDetail.objects.all().exclude(combo=None).aggregate(total=Coalesce(Sum('quantity'), V(0)))
 
