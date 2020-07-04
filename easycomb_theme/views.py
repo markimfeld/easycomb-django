@@ -8,7 +8,7 @@ from django.shortcuts import render
 from clients.models import Customer
 from inventory.models import Product, Combo
 from orders.models import Order, Status, OrderDetail
-from suppliers.models import PurchaseDetail
+from suppliers.models import PurchaseDetail, Purchase
 
 
 def is_valid_params(params):
@@ -21,12 +21,19 @@ def index(request):
     order_details = OrderDetail.objects.all().select_related('combo', 'order')
 
     status = Status.objects.first()
-
-    purchase_details = PurchaseDetail.objects.all().select_related('purchase'); 
-    stock_stats = purchase_details.filter(purchase__date__exact='2020-6-17') \
+    
+    last_purchase = Purchase.objects.all().last()
+    purchase_details = PurchaseDetail.objects.all().select_related('purchase') 
+    stock_stats = purchase_details.filter(purchase__date__exact=last_purchase.date) \
         .annotate(total_percentages=Cast(((Cast(F('product__stock'), FloatField()) / Cast(F('quantity'), FloatField())) * 100.0), IntegerField())) \
         .values('product__name', 'product__stock', 'quantity', 'total_percentages') 
 
+    # total cost for the last purchase in the same date
+    total_cost = purchase_details.filter(purchase__date__exact='2020-6-29') \
+        .annotate(subtotal_cost=ExpressionWrapper(F('quantity') * F('cost'), output_field=FloatField())) \
+        .aggregate(total_cost=Sum('subtotal_cost'))
+
+    
 
     return render(request, 'easycomb_theme/index.html', {
         'products': Product.objects.all(),

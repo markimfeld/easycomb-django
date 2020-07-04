@@ -133,7 +133,7 @@ def get_order_details(request, pk):
     # get order's details and calculate subtotals
     order_details_with_subtotals = calculate_subtotals(order)
 
-    quantity_sum = order.get_products.all().aggregate(Sum('quantity'))
+    quantity_sum = order.get_products.all().aggregate(total_quantity=Sum('quantity'))
 
     total_combo = order_details_with_subtotals.aggregate(Sum('subtotal_combos'))
     total_products = order_details_with_subtotals.aggregate(Sum('subtotal_products'))
@@ -149,7 +149,7 @@ def get_order_details(request, pk):
     return render(request, 'orders/order-details.html', {
         'combos_total': total_combo['subtotal_combos__sum'],
         'products_total': total_products['subtotal_products__sum'],
-        'quantity_total': quantity_sum['quantity__sum'],
+        'quantity_total': quantity_sum['total_quantity'], 
         'order': order,
         'incomes': incomes,
         'order_details_with_subtotals': order_details_with_subtotals,
