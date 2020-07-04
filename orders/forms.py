@@ -54,7 +54,9 @@ class NewOrderForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(NewOrderForm, self).__init__(*args, **kwargs)
-        self.fields['customer'].queryset = Customer.objects.filter(status=True)
+        customers = Customer.objects.filter(status=True)
+        options = [(customer.id, customer.first_name) for customer in customers]
+        self.fields['customer'].choices = options 
 
 class NewOrderDetailForm(forms.ModelForm):
     class Meta:

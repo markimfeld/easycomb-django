@@ -1,9 +1,9 @@
 {% extends 'easycomb_theme/layout.html' %}
 
 {% block section-title %}
-Clientes
-<a class="btn btn-success btn-sm" href="{% url 'clients:new_customer' %}"><i class="fas fa-plus-circle">
-        Agregar</i></a>
+    Clientes
+    <a accesskey="a" id="btnAddClient" class="btn btn-success btn-sm" href="{% url 'clients:new_customer' %}"><i class="fas fa-plus-circle">
+            Agregar</i></a>
 {% endblock section-title %}
 
 {% block content %}
@@ -160,8 +160,23 @@ Clientes
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
-
 </section>
 
 <!-- /.content -->
 {% endblock content %}
+
+{% block page-script %}
+<script type="text/javascript">
+  if (document.layers) {
+  document.captureEvents(Event.KEYDOWN);
+}
+/* add a shortcut with key 'a' for add client button */
+document.onkeydown = function (evt) {
+  const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+  if (keyCode === 65) {
+    const href = $('#btnAddClient').attr('href');
+    window.location.href = href
+  }
+};
+</script>
+{% endblock page-script %}

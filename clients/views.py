@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import (
     F,
     ExpressionWrapper,
@@ -61,7 +62,10 @@ def add_new_customer(request):
             customer = form.save(commit=False)
             if not Customer.objects.filter(first_name__iexact=customer.first_name, last_name__iexact=customer.last_name).exists():
                 customer.save()
+                messages.success(request, 'Cliente Registrado!')
                 return HttpResponseRedirect(reverse('clients:customers'))
+            else:
+                messages.error(request, 'Ya existe un cliente con ese nombre y apellido!')
 
     return render(request, 'clients/customer-add.html', {
         'form': NewCustomerForm()
