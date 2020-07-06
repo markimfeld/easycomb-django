@@ -16,6 +16,11 @@ from django.utils.decorators import method_decorator
 # Create your views here.
 from .models import Customer
 from .forms import NewCustomerForm
+from orders.models import OrderDetail
+from suppliers.models import PurchaseDetail
+
+def is_params_valid(params):
+    return params != '' and params is not None
 
 def calculate_total_orders(orders):
     total = 0
@@ -50,7 +55,6 @@ def get_customer_details(request, pk):
     customer = Customer.objects.get(pk=pk)
 
     total_to_paid = calculate_total_orders(customer.orders.filter(paid_status=False).all())
-    print(total_to_paid)
 
     return render(request, 'clients/customer-details.html', {
         'customer': customer,
@@ -107,3 +111,59 @@ def deactivate_customer(request, pk):
         customer.save()
         return HttpResponseRedirect(reverse('clients:customers'))
 
+@login_required
+def get_total_customer_combos(request):
+    startDate = request.GET.get('startDate')
+    endDate = request.GET.get('endDate')
+
+    purchase_details = PurchaseDetail.objects.all().select_related('purchase')
+
+    cost_purchases = purchase_details \
+        .annotate(sub_total=ExpressionWrapper(F('cost') * F('quantity'), output_field=FloatField())) \
+        .aggregate(total_cost=Sum('sub_total'))
+    
+
+    order_details = OrderDetail.objects.all().select_related('order')
+    
+    customers_total_combos = order_details.exclude(combo=None) \
+        .values('order__customer__first_name', 'order__customer__last_name') \
+        .annotate ( 
+            sub_total=Coalesce(Sum('quantity'), V(0)),
+            monto=ExpressionWrapper(Sum(F('quantity') * F('price_combo')), output_field=FloatField()),
+            money_received=Coalesce(Sum('order__incomes__amount'), V(0)),
+            balance=F('monto') - F('money_received')
+        )
+    
+    total_quantity = customers_total_combos.aggregate(total=Coalesce(Sum('sub_total'), V(0)))
+    facturacion = customers_total_combos.aggregate(total=Coalesce(Sum('monto'), V(0)))
+
+    revenue = facturacion['total'] - cost_purchases['total_cost']
+
+
+    if is_params_valid(startDate) and is_params_valid(endDate):
+        customers_total_combos = order_details.exclude(combo=None) \
+            .filter(order__date__range=[startDate, endDate]) \
+            .values('order__customer__first_name', 'order__customer__last_name') \
+            .annotate ( 
+                sub_total=Coalesce(Sum('quantity'), V(0)),
+                monto=ExpressionWrapper(Sum(F('quantity') * F('price_combo')), output_field=FloatField()),
+                money_received=Coalesce(Sum('order__incomes__amount'), V(0)),
+                balance=F('monto') - F('money_received')
+            )
+        total_quantity = customers_total_combos.aggregate(total=Coalesce(Sum('sub_total'), V(0)))
+        facturacion = customers_total_combos.aggregate(total=Coalesce(Sum('monto'), V(0)))
+
+        cost_purchases = purchase_details \
+            .filter(purchase__date__exact=startDate) \
+            .annotate(sub_total=ExpressionWrapper(F('cost') * F('quantity'), output_field=FloatField())) \
+            .aggregate(total_cost=Coalesce(Sum('sub_total'), V(0)))
+
+        revenue = facturacion['total'] - cost_purchases['total_cost']
+
+    return render(request, 'clients/reports.html', {
+        'customers_total_combos': customers_total_combos,
+        'total_quantity': total_quantity['total'],
+        'facturacion': facturacion['total'],
+        'total_cost': cost_purchases['total_cost'],
+        'revenue': revenue
+    })

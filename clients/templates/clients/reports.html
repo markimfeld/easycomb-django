@@ -1,0 +1,159 @@
+{% extends 'easycomb_theme/layout.html' %}
+
+{% load static %}
+
+{% block header-resource %}
+<!-- Tempusdominus Bbootstrap 4 -->
+<link rel="stylesheet"
+      href="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<!-- daterange picker -->
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.css' %}">
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'easycomb_theme/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock header-resource %}
+
+
+{% block section-title %}
+Reportes
+{% endblock section-title %}
+
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+  <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <h3 class="card-title mr-4">Reporte Semanal</h3>
+      <!-- Date range -->
+      <form id="dateRangeForm" method="get" class="form-inline">
+        <div class="form-group">
+          <label class="mr-3">Rango de Fecha: </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="far fa-calendar-alt"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control float-right" id="reservation">
+          </div>
+        </div>
+        <input name="startDate" type="hidden" id="startDate">
+        <input name="endDate" type="hidden" id="endDate">
+        <!-- /.input group -->
+      </form>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Cliente</th>
+            <th class="text-center" style="width: 150px;">Total Combos</th>
+            <th class="text-center">Monto</th>
+            <th class="text-center">Entrego</th>
+            <th class="text-center">Saldo</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for customer in customers_total_combos %}
+          <tr>
+            <td>{{ customer.order__customer__first_name }} {{ customer.order__customer__last_name }}</td>
+            <td class="text-center">{{ customer.sub_total }}</td>
+            <td class="text-center">${{ customer.monto }} </td>
+            <td class="text-center">${{ customer.money_received }} </td>
+            <td class="text-center">${{ customer.balance }}</td>
+          </tr>
+          {% endfor %}
+          
+          <tr class="bg-light font-weight-bold h5">
+            <td>Total</td>
+            <td class="text-center">{{ total_quantity  }}</td>
+            <td class="text-center">${{ facturacion }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr class="bg-light font-weight-bold h5">
+            <td>Costo</td>
+            <td class="text-center">${{ total_cost }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr class="bg-light font-weight-bold h5">
+            <td >Ganancia</td>
+            <td class="text-center">${{ revenue }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</section>
+<!-- /.content -->
+{% endblock content %}
+
+
+{% block page-script %}
+
+<!-- daterangepicker -->
+<script src="{% static 'easycomb_theme/plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'easycomb_theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- DataTables -->
+<script src="{% static 'easycomb_theme/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/JSZip-2.5.0/jszip.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'easycomb_theme/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+
+<script>
+  //Date range picker
+  $('#reservation').daterangepicker();
+  $('#reservation').on('apply.daterangepicker', function(ev, picker) {
+    const startDate = $('#startDate').val(picker.startDate.format('YYYY-MM-DD'));
+    const endDate = $('#endDate').val(picker.endDate.format('YYYY-MM-DD'));
+
+    $('#dateRangeForm').submit();
+  });	
+
+  $(function() {
+    $("#example1").DataTable({
+      dom: 'lBfrtip',
+      buttons: [
+        {
+          extend: 'excel',
+          title: `Reporte Semanal`,
+          text: '<i class="far fa-file-excel"></i>',
+          className: 'btn btn-success',
+          filename: 'reportesemanal',
+          customize: function( xlsx ) {
+              var sheet = xlsx.xl.worksheets['sheet1.xml'];
+              $('c', sheet).attr( 's', '25' );
+          }
+        }
+      ],
+      "responsive": true,
+      "autoWidth": false,
+      "searching": false,
+      "ordering": false
+    });
+  });
+</script>
+
+{% endblock page-script %}
+
