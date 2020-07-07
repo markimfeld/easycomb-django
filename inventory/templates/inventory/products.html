@@ -112,7 +112,7 @@ Productos
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
-                    {% endfor %}
+                    {% empty %}
                     <tr>
                         <td></td>
                         <td>No hay productos agregados.</td>
@@ -122,6 +122,7 @@ Productos
                         <td></td>
                         <td></td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
