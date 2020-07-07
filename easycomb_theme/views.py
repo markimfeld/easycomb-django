@@ -22,11 +22,12 @@ def index(request):
 
     status = Status.objects.first()
     
-    last_purchase = Purchase.objects.all().last()
     purchase_details = PurchaseDetail.objects.all().select_related('purchase') 
-    stock_stats = purchase_details.filter(purchase__date__exact=last_purchase.date) \
-        .annotate(total_percentages=Cast(((Cast(F('product__stock'), FloatField()) / Cast(F('quantity'), FloatField())) * 100.0), IntegerField())) \
-        .values('product__name', 'product__stock', 'quantity', 'total_percentages') 
+
+    # stock_stats = purchase_details \
+    #    .annotate(total_percentages=Cast(((Cast(F('product__stock'), FloatField()) / Cast(F('quantity'), FloatField())) * 100.0), IntegerField())) \
+    #    .values('product__name', 'product__stock', 'quantity', 'total_percentages') 
+
 
     # total cost for the last purchase in the same date
     total_cost = purchase_details.filter(purchase__date__exact='2020-6-29') \
@@ -47,7 +48,6 @@ def index(request):
     return render(request, 'easycomb_theme/index.html', {
         'revenue': revenue['total'],
         'products': Product.objects.all(),
-        'stock_stats': stock_stats,
         'orders': Order.objects.all(),
         'quantity_orders': Order.objects.filter(status=status).all().count,
         'quantity_products': Product.objects.all().count,

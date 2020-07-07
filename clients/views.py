@@ -117,11 +117,13 @@ def get_total_customer_combos(request):
     endDate = request.GET.get('endDate')
 
     purchase_details = PurchaseDetail.objects.all().select_related('purchase')
-
+    
     cost_purchases = purchase_details \
         .annotate(sub_total=ExpressionWrapper(F('cost') * F('quantity'), output_field=FloatField())) \
-        .aggregate(total_cost=Sum('sub_total'))
+        .aggregate(total_cost=Sum('sub_total'))['total_cost']
     
+    if cost_purchases is None:
+        cost_purchases = 0
 
     order_details = OrderDetail.objects.all().select_related('order')
     
@@ -137,7 +139,11 @@ def get_total_customer_combos(request):
     total_quantity = customers_total_combos.aggregate(total=Coalesce(Sum('sub_total'), V(0)))
     facturacion = customers_total_combos.aggregate(total=Coalesce(Sum('monto'), V(0)))
 
-    revenue = facturacion['total'] - cost_purchases['total_cost']
+    revenue = 0
+    try:
+        revenue = facturacion['total'] - cost_purchases['total_cost']
+    except Exception as ex:
+        print(ex)
 
 
     if is_params_valid(startDate) and is_params_valid(endDate):
@@ -157,13 +163,15 @@ def get_total_customer_combos(request):
             .filter(purchase__date__exact=startDate) \
             .annotate(sub_total=ExpressionWrapper(F('cost') * F('quantity'), output_field=FloatField())) \
             .aggregate(total_cost=Coalesce(Sum('sub_total'), V(0)))
-
-        revenue = facturacion['total'] - cost_purchases['total_cost']
+        try:
+            revenue = facturacion['total'] - cost_purchases['total_cost']
+        except Exception as ex:
+            print(ex)
 
     return render(request, 'clients/reports.html', {
         'customers_total_combos': customers_total_combos,
         'total_quantity': total_quantity['total'],
         'facturacion': facturacion['total'],
-        'total_cost': cost_purchases['total_cost'],
+        'total_cost': cost_purchases,
         'revenue': revenue
     })

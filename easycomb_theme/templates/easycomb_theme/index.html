@@ -253,24 +253,19 @@ Escritorio
           <!-- /.card-header -->
           <div class="card-body p-0">
             <div class="col p-3">
-              {% for product in stock_stats %}
-              <div class="progress-group">
-                {{ product.product__name }}
-                <span class="float-right"><b>{{ product.product__stock }}</b>/{{ product.quantity }}</span>
-                <div class="progress progress-sm">
-                  {% if product.total_percentages > 80 %}	
-                  <div class="progress-bar bg-primary" style="width: {{ product.total_percentages }}%"></div>
-                  {% elif product.total_percentages > 50 %}
-                  <div class="progress-bar bg-success" style="width: {{ product.total_percentages }}%"></div>
-                  {% elif product.total_percentages > 20 %}
-                  <div class="progress-bar bg-warning" style="width: {{ product.total_percentages }}%"></div>
-                  {% else %}
-                  <div class="progress-bar bg-danger" style="width: {{ product.total_percentages }}%"></div>
-                  {% endif %}
-                </div>
-              </div>
-              <!-- /.progress-group -->
+              <ul class="list-group">
+              {% for product in products %}
+              {% if product.stock > 100 %}
+              <li class="list-group-item">{{ product.name }}<span class="badge badge-success float-right">{{ product.stock  }}</span></li>
+              {% elif product.stock > 50 %}
+              <li class="list-group-item">{{ product.name }}<span class="badge badge-info float-right">{{ product.stock  }}</span></li>
+              {% elif product.stock > 10 %}
+              <li class="list-group-item">{{ product.name }}<span class="badge badge-warning float-right">{{ product.stock  }}</span></li>
+              {% else %}
+              <li class="list-group-item">{{ product.name }}<span class="badge badge-danger float-right">{{ product.stock  }}</span></li>
+              {% endif %}
               {% endfor %}
+              </ul>
             </div>
             <!-- /.col -->
           </div>
