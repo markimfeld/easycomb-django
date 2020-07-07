@@ -131,7 +131,7 @@ Escritorio
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Order ID</th>
+                  <th>Nro. Pedido</th>
                   <th>Cliente</th>
                   <th>Fecha</th>
                   <th class="text-center">Estado</th>
@@ -155,17 +155,11 @@ Escritorio
                   </td>
                 </tr>
                 {% empty %}
-                <tr>
-                  <td></td>
-                  <td>No hay pedidos nuevos.</td>
-                  <td></td>
-                  <td></td>
-                </tr>
                 {% endfor %}
               </tbody>
               <tfoot>
                 <tr>
-                  <th>Order ID</th>
+                  <th>Nro. Pedido</th>
                   <th>Cliente</th>
                   <th>Fecha</th>
                   <th>Estado</th>
@@ -348,7 +342,8 @@ Escritorio
         },
         "info": "Mostrando _START_ a _END_ de _TOTAL_ pedidos",
         "lengthMenu": "Mostrar _MENU_ registros",
-        "search": "Filtrar pedidos"
+        "search": "Filtrar pedidos",
+        "emptyTable": "No hay datos disponibles"
       }
     });
   });
