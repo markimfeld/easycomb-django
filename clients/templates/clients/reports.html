@@ -65,8 +65,14 @@ Reportes
             <td class="text-center">${{ customer.money_received }} </td>
             <td class="text-center">${{ customer.balance }}</td>
           </tr>
+          {% empty %}
+          <td>No hay registros</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
           {% endfor %}
-          
+          {% if customers_total_combos %}
           <tr class="bg-light font-weight-bold h5">
             <td>Total</td>
             <td class="text-center">{{ total_quantity  }}</td>
@@ -88,6 +94,7 @@ Reportes
             <td></td>
             <td></td>
           </tr>
+          {% endif %}
           </tbody>
         </table>
     </div>
