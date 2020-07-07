@@ -104,6 +104,14 @@ Proveedores
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
+                    {% empty %}
+                    <tr>
+                      <td></td>
+                      <td>No hay proveedores</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
